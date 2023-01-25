@@ -30,6 +30,13 @@ std::vector<signed char> *pWave;
 wavAgent.GetWave(&pWave, 0);
 ```
 
+`SoundData` が持つ波形データのチャンネル数を調べるためには、 `GetChannelCount` 関数を使用する。チャンネルの個数を入れてほしい `int` 型の変数のポインタを渡す。
+
+```C++
+int chennelCount = 0;
+wavAgent.GetChannelCount(&channelCount);
+```
+
 サウンドのチャンネル数やサンプリング周波数などのメタデータを取得する場合は、 `SoundData` が保持する `MetaData` を参照する。 `WavAgent` から `SoundData` を取得した時と同様に `MetaData` のポインタのポインタを `SoundData` の `GetMetaData` に渡すと、そのポインタが `SoundData` が保持する `MetaData` を指すようになる。
 
 ```C++
