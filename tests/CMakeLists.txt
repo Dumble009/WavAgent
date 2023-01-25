@@ -21,9 +21,9 @@ file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false RELATIVE "${CMAKE_SOURCE_D
 
 add_executable(${TestName} ${TEST_SOURCES})
 
-target_include_directories(${TestName} PUBLIC "${CMAKE_SOURCE_DIR}/libsources" "C:/MyLib/test/include")
-target_link_directories(${TestName} PUBLIC "${CMAKE_SOURCE_DIR}/build" "C:/MyLib/test/lib")
-target_link_libraries(${TestName} GTest::gtest_main CircleCITest) #その他必要なライブラリを適宜ここに追加する
+target_include_directories(${TestName} PUBLIC "${CMAKE_SOURCE_DIR}/libsources")
+target_link_directories(${TestName} PUBLIC "${CMAKE_SOURCE_DIR}/build")
+target_link_libraries(${TestName} GTest::gtest_main WavAgent) #その他必要なライブラリを適宜ここに追加する
 
 include(GoogleTest)
 gtest_discover_tests(${TestName})

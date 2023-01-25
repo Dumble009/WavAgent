@@ -34,7 +34,7 @@
 		{
 			"type":"shell",
 			"label": "run executable",
-			"command": "${workspaceRoot}/build/a.exe",
+			"command": "${workspaceRoot}/build/WavAgentTest.exe",
 			"dependsOn":["run test"],
 			"dependsOrder": "sequence",
 			"group": {
