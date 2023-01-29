@@ -34,7 +34,7 @@ wavAgent.GetWave(&pWave, 0);
 
 ```C++
 MetaData *pMetaData = NULL;
-wavAgent.GetMetaData(&pMetaData);
+soundData.GetMetaData(&pMetaData);
 ```
 
 なお、全ての関数操作は、返り値として `WavAgentErrorCode` の値を返す。返り値が `WAV_AGENT_SUCCESS` であれば正常終了しており、それ以外であれば、何らかのエラーが発生している。エラーの種類は `WavAgentErrorCode` の値を調べれば分かる。
