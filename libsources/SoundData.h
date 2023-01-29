@@ -39,5 +39,8 @@ namespace wavAgent
 
         // 音声データに含まれるメタデータを保持したオブジェクトへのポインタを返す
         WavAgentErrorCode GetMetaData(MetaData **ppMetaData);
+
+        // WavAgentクラスからは直接メンバを操作できるようにフレンド指定しておく
+        friend WavAgent;
     };
 }
