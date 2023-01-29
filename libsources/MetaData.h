@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "SampleFormatType.h"
+#include "WavAgentErrorCode.h"
 
 namespace wavAgent
 {
@@ -28,15 +29,15 @@ namespace wavAgent
             int _sampleCount);
 
         // 波形データに含まれるチャンネル数を返す
-        int GetChannelCount();
+        WavAgentErrorCode GetChannelCount(int &ret);
 
         // サンプリング周波数。単位はHz
-        int GetSamplingFreqHz();
+        WavAgentErrorCode GetSamplingFreqHz(int &ret);
 
         // サンプルのデータ形式
-        SampleFormatType GetSampleFormat();
+        WavAgentErrorCode GetSampleFormat(WavAgentErrorCode &ret);
 
         // 波形データの1チャンネルに含まれるサンプル数
-        int GetSampleCount();
+        WavAgentErrorCode GetSampleCount(int &ret);
     };
 }
