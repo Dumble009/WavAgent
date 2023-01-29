@@ -4,6 +4,5 @@
 
 int main(void)
 {
-    wavAgent::helloWorld();
     return 0;
 }
