@@ -25,7 +25,7 @@ namespace wavAgent
         MetaData(
             int _channelCount,
             int _samplingFreqHz,
-            int _sampleFormat,
+            SampleFormatType _sampleFormat,
             int _sampleCount);
 
         // 波形データに含まれるチャンネル数を返す
@@ -35,7 +35,7 @@ namespace wavAgent
         WavAgentErrorCode GetSamplingFreqHz(int &ret);
 
         // サンプルのデータ形式
-        WavAgentErrorCode GetSampleFormat(WavAgentErrorCode &ret);
+        WavAgentErrorCode GetSampleFormat(SampleFormatType &ret);
 
         // 波形データの1チャンネルに含まれるサンプル数
         WavAgentErrorCode GetSampleCount(int &ret);
