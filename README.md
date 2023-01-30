@@ -73,6 +73,14 @@ ConvertWavAgentErrorCodeToDescription(WavAgentErrorCode::WAV_AGENT_SUCCESS)
 
 wav ファイルから読み込んだデータを格納する先を示すポインタ。呼び出し側でオブジェクトを作成しておき、そのポインタを渡す必要がある。
 
+## 返り値 : `WavAgentErrorCode`
+
+正常に処理が終了したら `WAV_AGENT_SUCCESS` を返す。
+
+存在しないファイルを指定した場合、 `WAV_AGENT_FILE_NOT_EXIST` を返す。
+
+wav ファイルでないファイルを指定した場合、 `WAV_AGNET_NOT_WAV_FILE` を返す。
+
 # SoundData
 
 wav ファイルから読み込まれたデータを保持するオブジェクト。波形データを保持し、メタデータを保持する `MetaData` オブジェクトを有する。
@@ -83,7 +91,7 @@ wav ファイルから読み込まれたデータを保持するオブジェク�
 
 ### 引数
 
-#### ppWave : `SampleUnsigned8bit, SampleSigned16bit,...`
+#### ppWave : `SampleUnsigned8bit**, SampleSigned16bit**,...`
 
 波形データのポインタのポインタ。 `SampleUnsigned8bit` など対応するフォーマットのポインタのポインタを渡すと、そのポインタが指す先が `SoundData` 内の波形データになる。
 
@@ -107,3 +115,21 @@ soundData.GetWave(&pWave, 0);
 存在しないチャンネルのデータを読み込もうとすると `WAV_AGENT_CHANNEL_OUT_OF_RANGE` を返す。
 
 wav ファイルが提供するフォーマットとは異なるフォーマットの `ppWave` を渡した場合は、 `WAV_AGENT_INVALID_FORMAT` を返す。
+
+`Load` 関数で適切に作成されていない `SoundData` に対して呼び出すと、 `WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED` を返す
+
+## GetMetaData
+
+`SoundData` が保持するメタデータのポインタを返す。
+
+### 引数
+
+#### ppMetaData : `MetaData**`
+
+メタデータのポインタのポインタ。このポインタの指す先が、 `SoundData` が保持する `MetaData` オブジェクトになる。
+
+### 返り値 : WavAgentErrorCode
+
+正常に処理が完了したら `WAV_AGENT_SUCCESS` を返す。
+
+`Load` 関数で適切に作成されていない `SoundData` に対して呼び出すと、 `WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED` を返す。

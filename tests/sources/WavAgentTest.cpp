@@ -146,3 +146,8 @@ TEST(WavAgentWavDataTest, BasicAssertions)
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_INVALID_FORMAT);
     EXPECT_EQ(pWave, nullptr);
 }
+
+// 読み込んだメタデータが正しいか調べる
+TEST(LoadMetaDataTest, BasicAssertions)
+{
+}
