@@ -133,3 +133,21 @@ wav ファイルが提供するフォーマットとは異なるフォーマッ�
 正常に処理が完了したら `WAV_AGENT_SUCCESS` を返す。
 
 `Load` 関数で適切に作成されていない `SoundData` に対して呼び出すと、 `WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED` を返す。
+
+# MetaData
+
+wav ファイルから読み込んだメタデータを保持するクラス。
+
+## GetChannelCount / GetSamplingFreqHz / GetSampleFormatType / GetSampleCount
+
+チャンネル数を取得する
+
+### 引数
+
+#### ret : `int& or SampleFormatType&`
+
+保持しているチャンネル数やサンプリング周波数などの情報が、この参照の先に格納される。
+
+### 返り値 : `WavAgentErrorCode`
+
+正常に処理が完了したら `WAV_AGENT_SUCCESS` を返す。現時点では失敗するパターンは存在しない。
