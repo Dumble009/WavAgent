@@ -93,6 +93,7 @@ soundData.GetWave(&pWave, 0);
 ```
 
 `SoundData` が破棄されると、波形データも破棄されてしまうので、寿命に注意。
+
 要求するチャンネルやフォーマットが不適切な場合は `nullptr` を指すようになる。
 
 #### channel : int

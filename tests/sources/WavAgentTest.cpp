@@ -133,4 +133,16 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          minValueFloat,
                          1,
                          1600);
+
+    // 不適切なフォーマットで読み込みをかけるとエラーコードとnullptrが返されることを調べる
+    wavAgent::SampleSigned32bit dummyValue = 0;
+    wavAgent::SampleSigned32bit *pWave = &dummyValue; // pWaveがnullptrに上書きされることを調べたいので、適当な有効なポインタを入れておく
+
+    wavAgent::SoundData soundData{};
+    auto ret = wavAgent::Load(PATH_u8_1ch_4410, &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+
+    ret = soundData.GetWave(&pWave, 0);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_INVALID_FORMAT);
+    EXPECT_EQ(pWave, nullptr);
 }

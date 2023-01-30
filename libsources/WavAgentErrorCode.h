@@ -9,6 +9,7 @@ namespace wavAgent
         WAV_AGENT_FILE_NOT_EXIST = 1,
         WAV_AGENT_NOT_WAV_FILE = 2,
         WAV_AGENT_CHANNEL_OUT_OF_RANGE = 3,
+        WAV_AGENT_INVALID_FORMAT = 4,
     };
 
     std::ostream &operator<<(std::ostream &os, WavAgentErrorCode code);
