@@ -17,6 +17,8 @@ namespace wavAgent
         MetaData metaData;
 
     public:
+        SoundData();
+
         // 特定のチャンネルの波形のポインタを返す
         WavAgentErrorCode GetWave(SampleUnsigned8bit **ppWave,
                                   int channel);
@@ -39,8 +41,5 @@ namespace wavAgent
 
         // 音声データに含まれるメタデータを保持したオブジェクトへのポインタを返す
         WavAgentErrorCode GetMetaData(MetaData **ppMetaData);
-
-        // WavAgentクラスからは直接メンバを操作できるようにフレンド指定しておく
-        friend WavAgent;
     };
 }

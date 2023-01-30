@@ -8,17 +8,11 @@ wav ファイルを読み込むライブラリ。OpenAL での使用を見越し
 
 ## 使用例
 
-wav ファイルを読み込みたいアプリケーションは、まず `WavAgent` オブジェクトを作成する。
-
-```C++
-auto wavAgent = WavAgent();
-```
-
-その後、読み込みたい wav ファイルのパスと、データを設定してほしい `SoundData` のポインタを与え、 `Load` 関数を呼び出す。
+読み込みたい wav ファイルのパスと、データを設定してほしい `SoundData` のポインタを与え、 `Load` 関数を呼び出す。
 
 ```C++
 SoundData soundData = SoundData();
-wavAgent.Load("data/sound.wav", &soundData);
+Load("data/sound.wav", &soundData);
 ```
 
 `SoundData` は波形データとメタデータを持つ。波形データは、各チャンネルごとに、 `int` の `vector` となっている。元の波形データの 1 サンプルが 32bit だった場合は、1 要素で 1 サンプルを表現する。元の波形データが、16bit だった場合は、1 要素で 2 つのサンプルを表現する。元の波形データが 8bit だった場合は、1 要素で 2 つのサンプルを表現する。 `int` 型の 32bit の余っている部分に入る値は不定。例えば 1 サンプルが 8bit で、サンプル数を 4 で割った時の余りが 3 の時、残りの 8bit が 0 で埋まっているとは限らない。ユーザに対してはこの実装は隠蔽される。
@@ -27,7 +21,7 @@ wavAgent.Load("data/sound.wav", &soundData);
 
 ```C++
 SampleSigned16bit *pWave;
-wavAgent.GetWave(&pWave, 0);
+soundData.GetWave(&pWave, 0);
 ```
 
 サウンドのチャンネル数やサンプリング周波数などのメタデータを取得する場合は、 `SoundData` が保持する `MetaData` を参照する。 `WavAgent` から `SoundData` を取得した時と同様に `MetaData` のポインタのポインタを `SoundData` の `GetMetaData` に渡すと、そのポインタが `SoundData` が保持する `MetaData` を指すようになる。

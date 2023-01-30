@@ -7,6 +7,6 @@ namespace wavAgent
 {
     // pathが指すwavファイルを読み込んで、pSoundDataが指す先に格納する
     WavAgentErrorCode Load(
-        std::string path,
+        const std::string &path,
         SoundData *pSoundData);
 }
