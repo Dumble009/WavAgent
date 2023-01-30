@@ -13,7 +13,11 @@ namespace wavAgent
 
     std::ostream &operator<<(std::ostream &os, WavAgentErrorCode code);
 
+    // エラーコードを、その名称の文字列に変換する
     std::string ConvertWavAgentErrorCodeToString(WavAgentErrorCode code);
+
+    // エラーコードから、その原因を説明した文字列に変換する
+    std::string ConvertWavAgentErrorCodeToDescription(WavAgentErrorCode code);
 
     // WAvAgentErrorCodeを返す関数が正常に終了したかどうか判定する
     inline bool IsDataLibActionSucceeded(WavAgentErrorCode code)
