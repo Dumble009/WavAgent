@@ -174,10 +174,14 @@ void LoadAndCheckMetaData(const std::string &path,
     // メタデータから各値を読み込み
     int actualChannelCount, actualSamplingFreqHz, actualSampleCount;
     wavAgent::SampleFormatType actualSampleFormatType;
-    pMetaData->GetChannelCount(actualChannelCount);
-    pMetaData->GetSamplingFreqHz(actualSamplingFreqHz);
-    pMetaData->GetSampleFormat(actualSampleFormatType);
-    pMetaData->GetSampleCount(actualSampleCount);
+    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+              pMetaData->GetChannelCount(actualChannelCount));
+    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+              pMetaData->GetSamplingFreqHz(actualSamplingFreqHz));
+    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+              pMetaData->GetSampleFormat(actualSampleFormatType));
+    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+              pMetaData->GetSampleCount(actualSampleCount));
 
     // 比較
     ASSERT_EQ(expectedChannelCount, actualChannelCount);
