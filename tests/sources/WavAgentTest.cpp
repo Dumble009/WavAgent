@@ -8,24 +8,28 @@ TEST(WavAgentLoadTest, BasicAssertions)
     wavAgent::SoundData soundData = wavAgent::SoundData();
     auto ret = wavAgent::Load("data/WAV-8000Hz-2ch-16bit-800Hz_square.wav",
                               &soundData);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     // 存在しないファイルを読み込み、エラーが返ってくることを確かめる
     ret = wavAgent::Load("not-exist-file", &soundData);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_NOT_EXIST);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_NOT_EXIST);
 
     // 存在するファイルだが、wavファイルでないファイルを読み込ませる
-    ret = wavAgent::Load("dummy1.txt", &soundData); // データを持っていない、拡張子がwavでないファイルを読み込もうとする
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
+    // データを持っていない、拡張子がwavでないファイルを読み込もうとする
+    ret = wavAgent::Load("dummy1.txt", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
-    ret = wavAgent::Load("dummy2.txt", &soundData); // データを持っている、拡張子がwavでないファイルを読み込もうとする
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
+    // データを持っている、拡張子がwavでないファイルを読み込もうとする
+    ret = wavAgent::Load("dummy2.txt", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
-    ret = wavAgent::Load("dummy3.wav", &soundData); // データを持っていない、拡張子がwavだがwavファイルでないファイルを読み込もうとする
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
+    // データを持っていない、拡張子がwavだがwavファイルでないファイルを読み込もうとする
+    ret = wavAgent::Load("dummy3.wav", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
-    ret = wavAgent::Load("dummy4.wav", &soundData); // データを持っている、拡張子がwavだがwavファイルでないファイルを読み込もうとする。
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
+    // データを持っている、拡張子がwavだがwavファイルでないファイルを読み込もうとする。
+    ret = wavAgent::Load("dummy4.wav", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 }
 
 template <class T>
@@ -38,6 +42,7 @@ void LoadAndCheckWaveData(const std::string &path,
     wavAgent::SoundData soundData = wavAgent::SoundData();
     auto ret = wavAgent::Load(path, &soundData);
 
+    // ここでSUCCESSが返ってこなかったら後の操作は出来ないのでASSERTを使用する
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     // 各チャンネルの波形を独立に調べる
@@ -47,24 +52,25 @@ void LoadAndCheckWaveData(const std::string &path,
         ret = soundData.GetWave(&pWave, i);
 
         ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
-        ASSERT_NE(pWave, nullptr); // pWaveには波形データを指す有効なポインタが格納される
+        // pWaveには波形データを指す有効なポインタが格納される
+        ASSERT_NE(pWave, nullptr);
 
         // サンプルの値を一つずつ調べていく。
         // 周期ごとに10個のサンプルが含まれ、前半5個が最大値、後半5個が最小値
         int sampleIdx = 0;
         for (int j = 0; j < waveCount; j++)
         {
-            ASSERT_EQ(pWave[sampleIdx], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 1], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 2], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 3], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 4], maxValue);
+            EXPECT_EQ(pWave[sampleIdx], maxValue);
+            EXPECT_EQ(pWave[sampleIdx + 1], maxValue);
+            EXPECT_EQ(pWave[sampleIdx + 2], maxValue);
+            EXPECT_EQ(pWave[sampleIdx + 3], maxValue);
+            EXPECT_EQ(pWave[sampleIdx + 4], maxValue);
 
-            ASSERT_EQ(pWave[sampleIdx + 5], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 6], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 7], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 8], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 9], minValue);
+            EXPECT_EQ(pWave[sampleIdx + 5], minValue);
+            EXPECT_EQ(pWave[sampleIdx + 6], minValue);
+            EXPECT_EQ(pWave[sampleIdx + 7], minValue);
+            EXPECT_EQ(pWave[sampleIdx + 8], minValue);
+            EXPECT_EQ(pWave[sampleIdx + 9], minValue);
 
             sampleIdx += 10;
         }
@@ -75,8 +81,8 @@ void LoadAndCheckWaveData(const std::string &path,
     // 存在しないチャンネルの波形データを読み込もうとするとエラーが変えることを調べる。
     ret = soundData.GetWave(&pWave, channelCount + 1);
 
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_CHANNEL_OUT_OF_RANGE);
-    ASSERT_EQ(pWave, nullptr); // 上でnullptrで無いことを確認したものがnullptrになっている事を確認
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_CHANNEL_OUT_OF_RANGE);
+    EXPECT_EQ(pWave, nullptr); // 上でnullptrで無いことを確認したものがnullptrになっている事を確認
 }
 
 const std::string PATH_u8_1ch_4410 = "WAV-44100Hz-1ch-u8bit-4410Hz_square.wav";
@@ -143,15 +149,15 @@ TEST(WavAgentWavDataTest, BasicAssertions)
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     ret = soundData.GetWave(&pWave, 0);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_INVALID_FORMAT);
-    ASSERT_EQ(pWave, nullptr);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_INVALID_FORMAT);
+    EXPECT_EQ(pWave, nullptr);
 
     // Load関数でロードされていないSoundDataに対してGetWave関数を実行したらエラーコードとnullptrが返されることを調べる。
     soundData = wavAgent::SoundData();
     pWave = &dummyValue; // pWaveがnullptrに上書きされることを調べるために、適当に有効なポインタを設定
     ret = soundData.GetWave(&pWave, 0);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
-    ASSERT_EQ(pWave, nullptr);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
+    EXPECT_EQ(pWave, nullptr);
 }
 
 void LoadAndCheckMetaData(const std::string &path,
@@ -174,20 +180,20 @@ void LoadAndCheckMetaData(const std::string &path,
     // メタデータから各値を読み込み
     int actualChannelCount, actualSamplingFreqHz, actualSampleCount;
     wavAgent::SampleFormatType actualSampleFormatType;
-    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+    EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
               pMetaData->GetChannelCount(actualChannelCount));
-    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+    EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
               pMetaData->GetSamplingFreqHz(actualSamplingFreqHz));
-    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+    EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
               pMetaData->GetSampleFormat(actualSampleFormatType));
-    ASSERT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
+    EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
               pMetaData->GetSampleCount(actualSampleCount));
 
     // 比較
-    ASSERT_EQ(expectedChannelCount, actualChannelCount);
-    ASSERT_EQ(expectedSamplengFreqHz, actualSamplingFreqHz);
-    ASSERT_EQ(expectedSampleFormat, actualSampleFormatType);
-    ASSERT_EQ(expectedSampleCount, actualSampleCount);
+    EXPECT_EQ(expectedChannelCount, actualChannelCount);
+    EXPECT_EQ(expectedSamplengFreqHz, actualSamplingFreqHz);
+    EXPECT_EQ(expectedSampleFormat, actualSampleFormatType);
+    EXPECT_EQ(expectedSampleCount, actualSampleCount);
 }
 
 // 読み込んだメタデータが正しいか調べる
@@ -246,6 +252,6 @@ TEST(LoadMetaDataTest, BasicAssertions)
     wavAgent::MetaData *pMetaData = &dummy; // nullptrで上書きされるか調べるために、適当に有効なポインタを設定しておく
     auto ret = soundData.GetMetaData(&pMetaData);
 
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
-    ASSERT_EQ(pMetaData, nullptr);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
+    EXPECT_EQ(pMetaData, nullptr);
 }
