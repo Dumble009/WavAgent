@@ -1,6 +1,12 @@
 ﻿#pragma once
+#include <string>
+#include "WavAgentErrorCode.h"
+#include "SoundData.h"
 
 namespace wavAgent
 {
-    void helloWorld();
+    // pathが指すwavファイルを読み込んで、pSoundDataが指す先に格納する
+    WavAgentErrorCode Load(
+        const std::string &path,
+        SoundData *pSoundData);
 }
