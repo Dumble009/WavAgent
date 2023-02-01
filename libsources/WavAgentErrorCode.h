@@ -19,7 +19,7 @@ namespace wavAgent
     std::string ConvertWavAgentErrorCodeToString(WavAgentErrorCode code);
 
     // エラーコードから、その原因を説明した文字列に変換する
-    std::string ConvertWavAgentErrorCodeToDescription(WavAgentErrorCode code);
+    std::string GetDescriptionOfErrorCode(WavAgentErrorCode code);
 
     // WAvAgentErrorCodeを返す関数が正常に終了したかどうか判定する
     inline bool IsDataLibActionSucceeded(WavAgentErrorCode code)
