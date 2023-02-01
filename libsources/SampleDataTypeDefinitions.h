@@ -23,28 +23,41 @@ namespace wavAgent
         char data[3]; // データの実体
 
     public:
+        SampleSigned24bit();
         SampleSigned24bit(int i); // int型からSampleSigned24bitへのキャスト
 
-        SampleSigned24bit operator+(SampleSigned24bit other);
-        SampleSigned24bit operator-(SampleSigned24bit other);
+        SampleSigned24bit operator+(SampleSigned24bit other) const;
+        SampleSigned24bit operator-(SampleSigned24bit other) const;
 
-        bool operator<(SampleSigned24bit other);
-        bool operator>(SampleSigned24bit other);
-        bool operator==(SampleSigned24bit other);
-        bool operator==(int other);
-        bool operator!=(SampleSigned24bit other);
+        bool operator<(SampleSigned24bit other) const;
+        bool operator<(int i) const;
 
-        SampleSigned24bit operator<<(SampleSigned24bit other);
-        SampleSigned24bit operator<<(int other);
-        SampleSigned24bit operator>>(SampleSigned24bit other);
-        SampleSigned24bit operator>>(int other);
-        SampleSigned24bit operator~();
-        SampleSigned24bit operator|(SampleSigned24bit other);
-        SampleSigned24bit operator|(int other);
-        SampleSigned24bit operator&(SampleSigned24bit other);
-        SampleSigned24bit operator&(int other);
-        SampleSigned24bit operator^(SampleSigned24bit other);
-        SampleSigned24bit operator^(int other);
+        bool operator<=(SampleSigned24bit other) const;
+        bool operator<=(int i) const;
+
+        bool operator>(SampleSigned24bit other) const;
+        bool operator>(int i) const;
+
+        bool operator>=(SampleSigned24bit other) const;
+        bool operator>=(int i) const;
+
+        bool operator==(SampleSigned24bit other) const;
+        bool operator==(int i) const;
+
+        bool operator!=(SampleSigned24bit other) const;
+        bool operator!=(int i) const;
+
+        SampleSigned24bit operator<<(SampleSigned24bit other) const;
+        SampleSigned24bit operator<<(int other) const;
+        SampleSigned24bit operator>>(SampleSigned24bit other) const;
+        SampleSigned24bit operator>>(int other) const;
+        SampleSigned24bit operator~() const;
+        SampleSigned24bit operator|(SampleSigned24bit other) const;
+        SampleSigned24bit operator|(int other) const;
+        SampleSigned24bit operator&(SampleSigned24bit other) const;
+        SampleSigned24bit operator&(int other) const;
+        SampleSigned24bit operator^(SampleSigned24bit other) const;
+        SampleSigned24bit operator^(int other) const;
 
         SampleSigned24bit operator+=(int other);
         SampleSigned24bit operator+=(SampleSigned24bit other);
@@ -56,4 +69,15 @@ namespace wavAgent
 
         operator int();
     };
+
+    // int型が左辺に来る演算子
+    bool operator<(int i, SampleSigned24bit v24);
+    bool operator<=(int i, SampleSigned24bit v24);
+    bool operator>(int i, SampleSigned24bit v24);
+    bool operator>=(int i, SampleSigned24bit v24);
+    bool operator==(int i, SampleSigned24bit v24);
+    bool operator!=(int i, SampleSigned24bit v24);
 }
+
+// 数値をSampleSigned24bitとして扱うことを宣言するリテラル
+wavAgent::SampleSigned24bit operator"" _24bit(unsigned long long i);
