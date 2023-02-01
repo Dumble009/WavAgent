@@ -46,7 +46,6 @@ namespace wavAgent
         SampleSigned24bit operator^(SampleSigned24bit other);
         SampleSigned24bit operator^(int other);
 
-        SampleSigned24bit operator=(int other);
         SampleSigned24bit operator+=(int other);
         SampleSigned24bit operator+=(SampleSigned24bit other);
         SampleSigned24bit operator-=(int other);

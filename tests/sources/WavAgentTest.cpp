@@ -76,7 +76,7 @@ void LoadAndCheckWaveData(const std::string &path,
         }
     }
 
-    ASSERT_NE(pWave, nullptr) // 直前に読み込んだ波形を指している事を確認
+    ASSERT_NE(pWave, nullptr); // 直前に読み込んだ波形を指している事を確認
 
     // 存在しないチャンネルの波形データを読み込もうとするとエラーが変えることを調べる。
     ret = soundData.GetWave(&pWave, channelCount + 1);
