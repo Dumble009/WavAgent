@@ -67,13 +67,13 @@ namespace wavAgent
         SampleSigned24bit operator^(SampleSigned24bit other) const;
         SampleSigned24bit operator^(int other) const;
 
-        SampleSigned24bit operator+=(int other);
         SampleSigned24bit operator+=(SampleSigned24bit other);
-        SampleSigned24bit operator-=(int other);
+        SampleSigned24bit operator+=(int other);
         SampleSigned24bit operator-=(SampleSigned24bit other);
+        SampleSigned24bit operator-=(int other);
 
-        SampleSigned24bit operator=(int other);
-        SampleSigned24bit operator=(char other);
+        SampleSigned24bit operator=(int i);
+        SampleSigned24bit operator=(unsigned char c);
 
         operator int();
     };
