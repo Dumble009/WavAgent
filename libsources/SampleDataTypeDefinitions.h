@@ -24,10 +24,19 @@ namespace wavAgent
 
     public:
         SampleSigned24bit();
-        SampleSigned24bit(int i); // int型からSampleSigned24bitへのキャスト
+        SampleSigned24bit(int i);  // int型からSampleSigned24bitへのキャスト
+        SampleSigned24bit(char c); // char型からSampleSigned24bitへのキャスト
+
+        // 単項符号演算子
+        SampleSigned24bit operator-() const;
+        SampleSigned24bit operator+() const;
 
         SampleSigned24bit operator+(SampleSigned24bit other) const;
+        SampleSigned24bit operator+(int i) const;
         SampleSigned24bit operator-(SampleSigned24bit other) const;
+        SampleSigned24bit operator-(int i) const;
+        SampleSigned24bit operator*(SampleSigned24bit other) const;
+        SampleSigned24bit operator*(int i) const;
 
         bool operator<(SampleSigned24bit other) const;
         bool operator<(int i) const;
@@ -71,6 +80,9 @@ namespace wavAgent
     };
 
     // int型が左辺に来る演算子
+    int operator+(int i, SampleSigned24bit v24);
+    int operator-(int i, SampleSigned24bit v24);
+    int operator*(int i, SampleSigned24bit v24);
     bool operator<(int i, SampleSigned24bit v24);
     bool operator<=(int i, SampleSigned24bit v24);
     bool operator>(int i, SampleSigned24bit v24);
