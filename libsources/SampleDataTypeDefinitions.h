@@ -20,12 +20,11 @@ namespace wavAgent
     struct SampleSigned24bit
     {
     private:
-        char data[3]; // データの実体
-
+        unsigned char data[3]; // データの実体
     public:
         SampleSigned24bit();
-        SampleSigned24bit(int i);  // int型からSampleSigned24bitへのキャスト
-        SampleSigned24bit(char c); // char型からSampleSigned24bitへのキャスト
+        SampleSigned24bit(int i);           // int型からSampleSigned24bitへのキャスト
+        SampleSigned24bit(unsigned char c); // char型からSampleSigned24bitへのキャスト
 
         // 単項符号演算子
         SampleSigned24bit operator-() const;
