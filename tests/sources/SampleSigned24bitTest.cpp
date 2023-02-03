@@ -86,8 +86,8 @@ TEST(SampleSigned24bitAssignment, BasicAssertions)
     wavAgent::SampleSigned24bit val2 = 10;
     EXPECT_EQ(val2, 10_24bit);
 
-    // charを用いた初期化
-    char c = (char)0xFF;
+    // unsignd charを用いた初期化
+    unsigned char c = (unsigned char)0xFF;
     wavAgent::SampleSigned24bit val3 = c;
     EXPECT_EQ(val3, 255_24bit);
 
@@ -132,7 +132,7 @@ TEST(SampleSigned24bitMathematics, BasicAssertions)
     EXPECT_EQ(-10_24bit - 13_24bit, -23_24bit);
     EXPECT_EQ(19_24bit - (-13_24bit), 32_24bit);
     EXPECT_EQ(-16_24bit - (-18_24bit), 2_24bit);
-    EXPECT_EQ(22_24bit - 10, 14_24bit);
+    EXPECT_EQ(22_24bit - 10, 12_24bit);
     EXPECT_EQ(18_24bit - 200, -182_24bit);
     EXPECT_EQ(120 - 2_24bit, 118);
     EXPECT_EQ(16 - 30_24bit, -14);
@@ -191,45 +191,86 @@ TEST(SampleSigned24bitMathematics, BasicAssertions)
     EXPECT_EQ(v1, 8_24bit);
 }
 
+// iの先頭24bitのみをチェックし24bit目を符号ビットとした値を返す
+int GetValueIn24bit(int i)
+{
+    // iの下23bitの値
+    int val23 = i & 0x007FFFFF;
+
+    // 符号ビットが1の場合2の補数を取って、得られた下23bitの絶対値に-1をかける
+    if ((i & (1 << 23)) != 0)
+    {
+        val23 ^= 0x00FFFFFF;
+        val23++;
+
+        return -(val23 & 0x007FFFFF);
+    }
+
+    return val23;
+}
+
 // ビット演算を正しくできるか確認する。
 TEST(SampleSigned24bitBitOperation, BasicAssertions)
 {
     wavAgent::SampleSigned24bit val1 = 0x0000F0;
-    EXPECT_EQ(val1 << 12_24bit, 0x0F0000);
-    EXPECT_EQ(val1 << 17_24bit, 0xE00000); // あふれるパターン
+    EXPECT_EQ(val1 << 12_24bit,
+              GetValueIn24bit(0x0F0000));
+    EXPECT_EQ(val1 << 17_24bit,
+              GetValueIn24bit(0xE00000)); // あふれるパターン
 
-    EXPECT_EQ(val1 << 8, 0x00F000);
-    EXPECT_EQ(val1 << 18, 0xC00000);
+    EXPECT_EQ(val1 << 8,
+              GetValueIn24bit(0x00F000));
+    EXPECT_EQ(val1 << 18,
+              GetValueIn24bit(0xC00000));
 
-    EXPECT_EQ(val1 >> 1_24bit, 0x000078);
-    EXPECT_EQ(val1 >> 6_24bit, 0x000003);
+    EXPECT_EQ(val1 >> 1_24bit,
+              GetValueIn24bit(0x000078));
+    EXPECT_EQ(val1 >> 6_24bit,
+              GetValueIn24bit(0x000003));
 
-    EXPECT_EQ(val1 >> 2, 0x00003C);
-    EXPECT_EQ(val1 >> 7, 0x000001);
+    EXPECT_EQ(val1 >> 2,
+              GetValueIn24bit(0x00003C));
+    EXPECT_EQ(val1 >> 7,
+              GetValueIn24bit(0x000001));
 
-    EXPECT_EQ(~val1, 0xFFFF0F);
-    EXPECT_EQ(~0_24bit, 0xFFFFFF);
+    EXPECT_EQ(~val1,
+              GetValueIn24bit(0xFFFF0F));
+    EXPECT_EQ(~0_24bit,
+              GetValueIn24bit(0xFFFFFF));
 
-    wavAgent::SampleSigned24bit val2 = 0x000FFF, val3 = 0xFFF000,
-                                val4 = 0x0F0F0F;
+    wavAgent::SampleSigned24bit val2 = GetValueIn24bit(0x000FFF),
+                                val3 = GetValueIn24bit(0xFFF000),
+                                val4 = GetValueIn24bit(0x0F0F0F);
     int i1 = 0xFFF000, i2 = 0xF0F0F0;
-    EXPECT_EQ(val2 | val3, 0xFFFFFF);
-    EXPECT_EQ(val2 | val4, 0x0F0FFF);
+    EXPECT_EQ(val2 | val3,
+              GetValueIn24bit(0xFFFFFF));
+    EXPECT_EQ(val2 | val4,
+              GetValueIn24bit(0x0F0FFF));
 
-    EXPECT_EQ(val2 | i1, 0xFFFFFF);
-    EXPECT_EQ(val2 | i2, 0xF0FFFF);
+    EXPECT_EQ(val2 | i1,
+              GetValueIn24bit(0xFFFFFF));
+    EXPECT_EQ(val2 | i2,
+              GetValueIn24bit(0xF0FFFF));
 
-    EXPECT_EQ(val2 & val3, 0x000000);
-    EXPECT_EQ(val2 & val4, 0x000F0F);
+    EXPECT_EQ(val2 & val3,
+              GetValueIn24bit(0x000000));
+    EXPECT_EQ(val2 & val4,
+              GetValueIn24bit(0x000F0F));
 
-    EXPECT_EQ(val2 & i1, 0x000000);
-    EXPECT_EQ(val2 & i2, 0x0000F0);
+    EXPECT_EQ(val2 & i1,
+              GetValueIn24bit(0x000000));
+    EXPECT_EQ(val2 & i2,
+              GetValueIn24bit(0x0000F0));
 
-    EXPECT_EQ(val2 ^ val3, 0xFFFFFF);
-    EXPECT_EQ(val2 ^ val4, 0x0F00F0);
+    EXPECT_EQ(val2 ^ val3,
+              GetValueIn24bit(0xFFFFFF));
+    EXPECT_EQ(val2 ^ val4,
+              GetValueIn24bit(0x0F00F0));
 
-    EXPECT_EQ(val2 ^ i1, 0xFFFFFF);
-    EXPECT_EQ(val2 ^ i2, 0xF0FF0F);
+    EXPECT_EQ(val2 ^ i1,
+              GetValueIn24bit(0xFFFFFF));
+    EXPECT_EQ(val2 ^ i2,
+              GetValueIn24bit(0xF0FF0F));
 }
 
 // 24bitから他の型へのキャストや、他の型から24bitへのキャスト正しく動作するかの確認

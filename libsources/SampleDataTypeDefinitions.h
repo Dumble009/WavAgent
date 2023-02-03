@@ -27,8 +27,8 @@ namespace wavAgent
         SampleSigned24bit(unsigned char c); // char型からSampleSigned24bitへのキャスト
 
         // 単項符号演算子
-        SampleSigned24bit operator-() const;
-        SampleSigned24bit operator+() const;
+        SampleSigned24bit operator-() const; // 元の符号に寄らず符号を判定
+        SampleSigned24bit operator+() const; // 元の符号に寄らず符号をそのままで返す
 
         SampleSigned24bit operator+(SampleSigned24bit other) const;
         SampleSigned24bit operator+(int i) const;
@@ -75,7 +75,7 @@ namespace wavAgent
         SampleSigned24bit operator=(int i);
         SampleSigned24bit operator=(unsigned char c);
 
-        operator int();
+        operator int() const;
     };
 
     // int型が左辺に来る演算子
@@ -91,4 +91,4 @@ namespace wavAgent
 }
 
 // 数値をSampleSigned24bitとして扱うことを宣言するリテラル
-wavAgent::SampleSigned24bit operator"" _24bit(unsigned long long i);
+wavAgent::SampleSigned24bit operator"" _24bit(unsigned long long ull);
