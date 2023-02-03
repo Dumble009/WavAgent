@@ -232,7 +232,7 @@ TEST(SampleSigned24bitBitOperation, BasicAssertions)
     EXPECT_EQ(val2 ^ i2, 0xF0FF0F);
 }
 
-// 24bitから他の値へのキャストが正しく動作するかの確認
+// 24bitから他の型へのキャストや、他の型から24bitへのキャスト正しく動作するかの確認
 TEST(SampleSigned24bitCast, BasicAssertions)
 {
     int i = (int)10_24bit;
@@ -240,4 +240,14 @@ TEST(SampleSigned24bitCast, BasicAssertions)
 
     i = (int)-10_24bit;
     EXPECT_EQ(i, -10);
+
+    wavAgent::SampleSigned24bit val = (wavAgent::SampleSigned24bit)300;
+    EXPECT_EQ(val, 300_24bit);
+    val = (wavAgent::SampleSigned24bit)-300;
+    EXPECT_EQ(val, -300_24bit);
+
+    unsigned char c = 55;
+
+    val = (wavAgent::SampleSigned24bit)c;
+    EXPECT_EQ(val, 55_24bit);
 }
