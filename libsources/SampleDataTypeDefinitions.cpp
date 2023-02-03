@@ -101,17 +101,6 @@ namespace wavAgent
         return 0_24bit;
     }
 
-    SampleSigned24bit SampleSigned24bit::operator-(int i) const
-    {
-        return 0_24bit;
-    }
-
-    SampleSigned24bit SampleSigned24bit::operator*(
-        SampleSigned24bit other) const
-    {
-        return 0_24bit;
-    }
-
     SampleSigned24bit SampleSigned24bit::operator*(int i) const
     {
         return 0_24bit;

@@ -80,37 +80,37 @@ TEST(SampleSigned24bitAssignment, BasicAssertions)
 {
     // 24bitを用いた初期化
     wavAgent::SampleSigned24bit val1 = 10_24bit;
-    EXPECT_TRUE(val1, 10_24bit);
+    EXPECT_EQ(val1, 10_24bit);
 
     // intを用いた初期化
     wavAgent::SampleSigned24bit val2 = 10;
-    EXPECT_TRUE(val2, 10_24bit);
+    EXPECT_EQ(val2, 10_24bit);
 
     // charを用いた初期化
     char c = (char)0xFF;
     wavAgent::SampleSigned24bit val3 = c;
-    EXPECT_TRUE(val3, 255_24bit);
+    EXPECT_EQ(val3, 255_24bit);
 
     // 16進数リテラルを用いた初期化
     wavAgent::SampleSigned24bit val4 = 0x012345;
-    EXPECT_TRUE(val4, 0x12345);
+    EXPECT_EQ(val4, 0x12345);
 
     // 24bitの代入
     val1 = 15_24bit;
-    EXPECT_TRUE(val1, 15_24bit);
+    EXPECT_EQ(val1, 15_24bit);
 
     // intの代入
     val1 = 20;
-    EXPECT_TRUE(val1, 20);
+    EXPECT_EQ(val1, 20);
 
     // charの代入
     c = 0x01;
     val3 = c;
-    EXPECT_TRUE(val3, 1_24bit);
+    EXPECT_EQ(val3, 1_24bit);
 
     // 16進数リテラルを用いた代入
     val1 = 0x012345;
-    EXPECT_TRUE(val1, 0x012345);
+    EXPECT_EQ(val1, 0x012345);
 }
 
 // 足し算や引き算などの算術演算が上手く行く事を確認
