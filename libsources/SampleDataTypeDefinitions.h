@@ -8,10 +8,10 @@ namespace wavAgent
     using SampleUnsigned8bit = unsigned char;
 
     // 16bit符号あり整数
-    using SampleSigned16bit = signed short;
+    using SampleSigned16bit = short;
 
     // 32bit符号あり整数
-    using SampleSigned32bit = int;
+    using SampleSigned32bit = int32_t;
 
     // 32bit符号あり浮動小数
     using SampleSigned32bitFloat = float;
