@@ -39,10 +39,5 @@ namespace wavAgent
 
         // 波形データの1チャンネルに含まれるサンプル数
         WavAgentErrorCode GetSampleCount(int &ret);
-
-        // Load関数からはメンバに直接アクセスできるようにする
-        friend WavAgentErrorCode Load(
-            const std::string &path,
-            SoundData *pSoundData);
     };
 }
