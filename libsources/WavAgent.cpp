@@ -23,8 +23,8 @@ namespace wavAgent
     {
         ifs.read((char *)pRetVal, sizeof(T)); // readはchar*しか受け取れないので、char*にキャストする必要がある
 
-        // readに何か失敗が起こった場合はbadがtrueになるので、正常に読み込むことが出来たか確認する
-        if (ifs.bad())
+        // readに何か失敗が起こった場合はfailがtrueになるので、正常に読み込むことが出来たか確認する
+        if (ifs.fail())
         {
             return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
         }
@@ -77,7 +77,7 @@ namespace wavAgent
 
         // RFIFチャンクは必ず8バイトのデータを含んでいるはずなので、
         // そうでなかったらファイルは破損している
-        if (ifs.bad())
+        if (ifs.fail())
         {
             return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
         }
