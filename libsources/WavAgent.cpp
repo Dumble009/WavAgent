@@ -29,7 +29,7 @@ namespace wavAgent
             return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
         }
 
-        return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
+        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
     // ifsを読み込み、identifierが見つかればtrue、見つからなければfalseを返す
