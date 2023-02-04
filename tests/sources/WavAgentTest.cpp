@@ -85,13 +85,13 @@ void LoadAndCheckWaveData(const std::string &path,
     EXPECT_EQ(pWave, nullptr); // 上でnullptrで無いことを確認したものがnullptrになっている事を確認
 }
 
-const std::string PATH_u8_1ch_4410 = "WAV-44100Hz-1ch-u8bit-4410Hz_square.wav";
-const std::string PATH_16_2ch_800 = "WAV-8000Hz-2ch-16bit-800Hz_square.wav";
-const std::string PATH_u8_1ch_38400 = "WAV-384000Hz-1ch-u8bit-38400Hz_square.wav";
-const std::string PATH_16_1ch_4410 = "WAV-44100Hz-1ch-16bit-4410Hz_square.wav";
-const std::string PATH_24_1ch_1600 = "WAV-16000Hz-1ch-24bit-1600Hz_square.wav";
-const std::string PATH_32_1ch_1600 = "WAV-16000Hz-1ch-32bit-1600Hz_square.wav";
-const std::string PATH_f32_1ch_1600 = "WAV-16000Hz-1ch-f32bit-16000Hz_square.wav";
+const std::string PATH_u8_1ch_4410 = "data/WAV-44100Hz-1ch-u8bit-4410Hz_square.wav";
+const std::string PATH_16_2ch_800 = "data/WAV-8000Hz-2ch-16bit-800Hz_square.wav";
+const std::string PATH_u8_1ch_38400 = "data/WAV-384000Hz-1ch-u8bit-38400Hz_square.wav";
+const std::string PATH_16_1ch_4410 = "data/WAV-44100Hz-1ch-16bit-4410Hz_square.txt";
+const std::string PATH_24_1ch_1600 = "data/WAV-16000Hz-1ch-24bit-1600Hz_square.wav";
+const std::string PATH_32_1ch_1600 = "data/WAV-16000Hz-1ch-32bit-1600Hz_square.wav";
+const std::string PATH_f32_1ch_1600 = "data/WAV-16000Hz-1ch-f32bit-16000Hz_square.wav";
 
 // 読み込んだ波形データが正しいかどうか
 TEST(WavAgentWavDataTest, BasicAssertions)
