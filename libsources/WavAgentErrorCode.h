@@ -25,7 +25,7 @@ namespace wavAgent
     std::string_view GetDescriptionOfErrorCode(WavAgentErrorCode code);
 
     // WAvAgentErrorCodeを返す関数が正常に終了したかどうか判定する
-    inline bool IsDataLibActionSucceeded(WavAgentErrorCode code)
+    inline bool IsWavAgentActionSucceeded(WavAgentErrorCode code)
     {
         // inline関数なのでヘッダに実装を記述する必要がある
         return code == WavAgentErrorCode::WAV_AGENT_SUCCESS;
