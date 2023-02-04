@@ -24,6 +24,7 @@ const std::string NOT_WAV_FILE_STRING = "WAV_AGENT_NOT_WAV_FILE";
 const std::string CHANNEL_OUT_OF_RANGE_STRING = "WAV_AGENT_CHANNEL_OUT_OF_RANGE";
 const std::string INVALID_FORMAT_STRING = "WAV_AGENT_INVALID_FORMAT";
 const std::string SOUND_DATA_IS_NOT_INITIALIZED_STRING = "WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED";
+const std::string FILE_IS_BROKEN_STRING = "WAV_AGENT_FILE_IS_BROKEN";
 
 // WavAgentErrorCodeを文字へ変換する処理を正しく行えるかどうかのテスト
 TEST(WavAgentErrorCodeToStringTest, BasicAssertions)
@@ -52,6 +53,10 @@ TEST(WavAgentErrorCodeToStringTest, BasicAssertions)
     EXPECT_EQ(wavAgent::ConvertWavAgentErrorCodeToString(
                   wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED),
               SOUND_DATA_IS_NOT_INITIALIZED_STRING);
+
+    EXPECT_EQ(wavAgent::ConvertWavAgentErrorCodeToString(
+                  wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN),
+              FILE_IS_BROKEN_STRING);
 }
 
 // WavAgentCodeのストリーム挿入子が正常に動作するか確認する処理
@@ -91,6 +96,10 @@ TEST(WavAgentErrorCodeToStreamTest, BasicAssertions)
     assertStreamString(
         wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED,
         SOUND_DATA_IS_NOT_INITIALIZED_STRING);
+
+    assertStreamString(
+        wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN,
+        FILE_IS_BROKEN_STRING);
 }
 
 // GetDescriptionOfErrorCode関数でエラーコードの説明を得られるかどうかのテスト

@@ -15,6 +15,17 @@ namespace wavAgent
     // サブチャンク識別子(data)。リトルエンディアンなのでdが下のバイトに来る
     constexpr int32_t DATA = 0x61746164;
 
+    // ifstreamから4バイト分のデータを読み込んで、int32_tとして返す
+    int32_t get32bitWord(
+        std::ifstream &ifs)
+    {
+        int32_t retVal = 0;
+
+        ifs.read((char *)&retVal, 4); // readはchar*しか受け取れないので、キャストする必要がある
+
+        return retVal;
+    }
+
     WavAgentErrorCode Load(
         std::string_view path,
         SoundData *pSoundData)
@@ -24,6 +35,7 @@ namespace wavAgent
         {
             return WavAgentErrorCode::WAV_AGENT_FILE_NOT_EXIST;
         }
+
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 }
