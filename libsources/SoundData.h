@@ -44,7 +44,7 @@ namespace wavAgent
 
         // Load関数からはメンバに直接アクセスできるようにする
         friend WavAgentErrorCode Load(
-            const std::string &path,
+            std::string_view path,
             SoundData *pSoundData);
     };
 }
