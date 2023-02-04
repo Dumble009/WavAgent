@@ -30,7 +30,7 @@ namespace wavAgent
         "WavAgent : Invalid channel index was passed. Please check a channel count in a meta data.",
         "WavAgent : Claimed format does not match with a format of data. Please check a sample format in a meta data.",
         "WavAgent : A sound data was not initialized. Please initialize it using Load function before accessing its members.",
-        "WavAgent : WavAgent : Passed wav file is broken. Metadata or payload has invalid values."};
+        "WavAgent : Passed wav file is broken. Metadata or payload has invalid values."};
 
     std::string_view GetDescriptionOfErrorCode(WavAgentErrorCode code)
     {

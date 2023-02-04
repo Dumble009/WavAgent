@@ -128,4 +128,8 @@ TEST(WavAgentGetDescriptionOfErrorCodeTest, BasicAssertions)
     EXPECT_EQ(wavAgent::GetDescriptionOfErrorCode(
                   wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED),
               "WavAgent : A sound data was not initialized. Please initialize it using Load function before accessing its members.");
+
+    EXPECT_EQ(wavAgent::GetDescriptionOfErrorCode(
+                  wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN),
+              "WavAgent : Passed wav file is broken. Metadata or payload has invalid values.");
 }
