@@ -16,6 +16,9 @@ namespace wavAgent
         // サンプリング周波数などのメタ情報
         MetaData metaData;
 
+        // Load関数によって初期化されたかどうか
+        bool isInitialized;
+
     public:
         SoundData();
 
