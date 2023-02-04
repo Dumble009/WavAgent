@@ -14,6 +14,7 @@ namespace wavAgent
         WAV_AGENT_INVALID_FORMAT = 4,
         WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED = 5,
         WAV_AGENT_FILE_IS_BROKEN = 6,
+        WAV_AGENT_NOT_SUPPORTED_FORMAT = 7,
     };
 
     std::ostream &operator<<(std::ostream &os, WavAgentErrorCode code);
