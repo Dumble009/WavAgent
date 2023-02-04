@@ -48,7 +48,7 @@ TEST(WavAgentLoadTest, BasicAssertions)
 
     // 1サンプル当たりのビット数が不正な値のファイルを読み込もうとする。
     // この場合は不正な値を持っているので、破損していると判定する
-    ret = wavAgent::Load("data/broken_invalid_format_type.wav", &soundData);
+    ret = wavAgent::Load("data/broken_invalid_bit_per_sample.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN);
 
     // 対応していないフォーマット(u-Lawやa-Law)などのファイルを読み込ませる。
