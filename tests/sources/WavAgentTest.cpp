@@ -30,6 +30,11 @@ TEST(WavAgentLoadTest, BasicAssertions)
     // データを持っている、拡張子がwavだがwavファイルでないファイルを読み込もうとする。
     ret = wavAgent::Load("data/dummy4.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
+
+    // RIFFチャンクのWAVEフォーマットが他の値になっているファイルを読み込もうとする
+    // この場合は破損ではなく、wavファイルではないという判定を行う
+    ret = wavAgent::Load("data/invalid_WAVE_token.wav", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 }
 
 template <class T>
