@@ -1,24 +1,24 @@
 ﻿#include "SampleDataTypeDefinitions.h"
 
 // SampleSigned24bit型の値の符号ビットをbool値で返す
-#define ISMARKBIT(v) (((v).data[2] & (unsigned char)0x80) != 0)
+#define ISMARKBIT(v) (((v).data[2] & (uint8_t)0x80) != 0)
 
 namespace wavAgent
 {
     // int型の変数iのidxバイト目の値を返す。idxは0-indexed
     inline unsigned char getOneByteInInteger(int i, int idx)
     {
-        return ((unsigned char *)&i)[idx];
+        return ((uint8_t *)&i)[idx];
     }
 
     // dataはcharの要素数3の配列の先頭ポインタ。
     // それを24bitの数値と見なし、-1をかけたのと同じ操作をする。
-    inline void invert(unsigned char *data)
+    inline void invert(uint8_t *data)
     {
         // 全部のビットを反転した後1加える
         for (int i = 0; i < 3; i++)
         {
-            data[i] ^= (char)0xFF;
+            data[i] ^= (uint8_t)0xFF;
         }
 
         for (int i = 0; i < 3; i++)
@@ -62,7 +62,7 @@ namespace wavAgent
         }
     }
 
-    SampleSigned24bit::SampleSigned24bit(unsigned char c)
+    SampleSigned24bit::SampleSigned24bit(uint8_t c)
     {
         data[0] = c;
         data[1] = 0;

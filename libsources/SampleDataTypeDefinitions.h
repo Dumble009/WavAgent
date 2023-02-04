@@ -1,14 +1,15 @@
 ﻿#pragma once
+#include <cstdint>
 
 // サンプルのデータ形式を表す型を定義する。
 
 namespace wavAgent
 {
     // 8bit符号なし整数
-    using SampleUnsigned8bit = unsigned char;
+    using SampleUnsigned8bit = uint8_t;
 
     // 16bit符号あり整数
-    using SampleSigned16bit = short;
+    using SampleSigned16bit = int16_t;
 
     // 32bit符号あり整数
     using SampleSigned32bit = int32_t;
@@ -20,11 +21,11 @@ namespace wavAgent
     struct SampleSigned24bit
     {
     private:
-        unsigned char data[3]; // データの実体
+        uint8_t data[3]; // データの実体
     public:
         SampleSigned24bit();
-        SampleSigned24bit(int i);           // int型からSampleSigned24bitへのキャスト
-        SampleSigned24bit(unsigned char c); // char型からSampleSigned24bitへのキャスト
+        SampleSigned24bit(int i);     // int型からSampleSigned24bitへのキャスト
+        SampleSigned24bit(uint8_t c); // char型からSampleSigned24bitへのキャスト
 
         // 単項符号演算子
         SampleSigned24bit operator-() const; // 元の符号に寄らず符号を判定
