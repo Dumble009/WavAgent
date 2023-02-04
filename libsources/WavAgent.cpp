@@ -15,37 +15,21 @@ namespace wavAgent
     // サブチャンク識別子(data)。リトルエンディアンなのでdが下のバイトに来る
     constexpr int32_t DATA = 0x61746164;
 
-    // ifstreamから4バイト分のデータを読み込んで、pRetValの先に代入する
-    WavAgentErrorCode get32bitWord(
+    // ifstreamからT型のバイト分のデータを読み込んで、pRetValの先に代入する
+    template <class T>
+    WavAgentErrorCode getWord(
         std::ifstream &ifs,
-        int32_t *pRetVal)
+        T *pRetVal)
     {
+        ifs.read((char *)pRetVal, sizeof(T)); // readはchar*しか受け取れないので、char*にキャストする必要がある
 
-        ifs.read((char *)pRetVal, sizeof(int32_t)); // readはchar*しか受け取れないので、キャストする必要がある
-
-        // readで何か失敗が起こった場合はbadがtrueになるので、正常に読み込むことが出来たか確認する
+        // readに何か失敗が起こった場合はbadがtrueになるので、正常に読み込むことが出来たか確認する
         if (ifs.bad())
         {
             return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
         }
 
-        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
-    }
-
-    // ifstreamから2バイト分のデータを読み込んで、pRetValに代入する
-    WavAgentErrorCode get16bitWord(
-        std::ifstream &ifs,
-        int16_t *pRetVal)
-    {
-        ifs.read((char *)pRetVal, sizeof(int16_t)); // readはchar*しか受け取れないので、キャストする必要がある
-
-        // readで何か失敗が起こった場合はbadがtrueになるので、正常に読み込むことが出来たか確認する
-        if (ifs.bad())
-        {
-            return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
-        }
-
-        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
+        return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
     }
 
     // ifsを読み込み、identifierが見つかればtrue、見つからなければfalseを返す
@@ -88,8 +72,8 @@ namespace wavAgent
         }
 
         // RFIFチャンクのフォーマットがWAVEである事を調べる。
-        get32bitWord(ifs, &buffer32); // RFIFチャンクの識別子の次の4バイトはチャンクサイズ
-        get32bitWord(ifs, &buffer32); // チャンクサイズの次の4バイトがフォーマット
+        getWord(ifs, &buffer32); // RFIFチャンクの識別子の次の4バイトはチャンクサイズ
+        getWord(ifs, &buffer32); // チャンクサイズの次の4バイトがフォーマット
 
         // RFIFチャンクは必ず8バイトのデータを含んでいるはずなので、
         // そうでなかったらファイルは破損している
