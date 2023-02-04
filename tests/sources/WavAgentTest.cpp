@@ -35,6 +35,11 @@ TEST(WavAgentLoadTest, BasicAssertions)
     // この場合は破損ではなく、wavファイルではないという判定を行う
     ret = wavAgent::Load("data/invalid_WAVE_token.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
+
+    // 波形データのサイズが間違っているファイルを読み込もうとする
+    // この場合は破損しているという判定が返って来ればOK
+    ret = wavAgent::Load("data/broken_tail_wrond_data_size.wav", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN);
 }
 
 template <class T>
