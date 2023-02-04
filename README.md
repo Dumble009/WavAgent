@@ -24,11 +24,11 @@ SampleSigned16bit *pWave = nullptr;
 soundData.GetWave(&pWave, 0);
 ```
 
-サウンドのチャンネル数やサンプリング周波数などのメタデータを取得する場合は、 `SoundData` が保持する `MetaData` を参照する。 `WavAgent` から `SoundData` を取得した時と同様に `MetaData` のポインタのポインタを `SoundData` の `GetMetaData` に渡すと、そのポインタが `SoundData` が保持する `MetaData` を指すようになる。
+サウンドのチャンネル数やサンプリング周波数などのメタデータを取得する場合は、 `SoundData` が保持する `MetaData` のコピーを貰う。 `WavAgent` から `SoundData` を取得した時と同様に `MetaData` オブジェクトを呼び出し側で作成し、そのポインタを `SoundData` の `GetMetaData` に渡すと、そのポインタが `SoundData` が保持する `MetaData` オブジェクトがそのポインタの先に代入される。
 
 ```C++
-MetaData *pMetaData = nullptr;
-soundData.GetMetaData(&pMetaData);
+MetaData metaData{};
+soundData.GetMetaData(&metaData);
 ```
 
 なお、全ての関数操作は、返り値として `WavAgentErrorCode` の値を返す。返り値が `WAV_AGENT_SUCCESS` であれば正常終了しており、それ以外であれば、何らかのエラーが発生している。エラーの種類は `WavAgentErrorCode` の値を調べれば分かる。
