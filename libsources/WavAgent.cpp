@@ -1,4 +1,5 @@
 ﻿#include "WavAgent.h"
+#include <fstream>
 
 namespace wavAgent
 {
@@ -18,7 +19,11 @@ namespace wavAgent
         std::string_view path,
         SoundData *pSoundData)
     {
-
+        std::ifstream ifs(path.data());
+        if (!ifs.is_open())
+        {
+            return WavAgentErrorCode::WAV_AGENT_FILE_NOT_EXIST;
+        }
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 }

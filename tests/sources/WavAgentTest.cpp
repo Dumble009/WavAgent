@@ -16,19 +16,19 @@ TEST(WavAgentLoadTest, BasicAssertions)
 
     // 存在するファイルだが、wavファイルでないファイルを読み込ませる
     // データを持っていない、拡張子がwavでないファイルを読み込もうとする
-    ret = wavAgent::Load("dummy1.txt", &soundData);
+    ret = wavAgent::Load("data/dummy1.txt", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
     // データを持っている、拡張子がwavでないファイルを読み込もうとする
-    ret = wavAgent::Load("dummy2.txt", &soundData);
+    ret = wavAgent::Load("data/dummy2.txt", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
     // データを持っていない、拡張子がwavだがwavファイルでないファイルを読み込もうとする
-    ret = wavAgent::Load("dummy3.wav", &soundData);
+    ret = wavAgent::Load("data/dummy3.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
     // データを持っている、拡張子がwavだがwavファイルでないファイルを読み込もうとする。
-    ret = wavAgent::Load("dummy4.wav", &soundData);
+    ret = wavAgent::Load("data/dummy4.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 }
 
