@@ -107,6 +107,27 @@ namespace wavAgent
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
+    // fmt識別子を探し、ifsをfmt識別子を読み終わった状態にする
+    WavAgentErrorCode findFmt(std::ifstream &ifs)
+    {
+        // fmt識別子を探す。見つからなければ、それはwavファイルではない。
+        if (!findIdentifier(ifs, FMT_))
+        {
+            return WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE;
+        }
+        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
+    }
+
+    // ifstreamからメタデータを読み込んで、pMetaDataの先にメタデータオブジェクトを代入する
+    // ifsは、fmt識別子を読み終わった直後のバイトを指している事
+    WavAgentErrorCode loadMetaData(
+        std::ifstream &ifs,
+        MetaData *pMetaData)
+    {
+
+        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
+    }
+
     WavAgentErrorCode Load(
         std::string_view path,
         SoundData *pSoundData)
@@ -120,6 +141,13 @@ namespace wavAgent
 
         // 読み込んだファイルがwavファイルかどうかチェック
         auto result = checkWavFile(ifs);
+        if (!IsWavAgentActionSucceeded(result))
+        {
+            return result;
+        }
+
+        // fmtチャンクを読み込んでメタデータを作成する
+        result = findFmt(ifs);
         if (!IsWavAgentActionSucceeded(result))
         {
             return result;
