@@ -10,6 +10,12 @@ TEST(WavAgentLoadTest, BasicAssertions)
                               &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
+    // float32のファイルは他とは違うフォーマットタイプを持っているが、正常に読み込めることを確認
+    wavAgent::SoundData soundData = wavAgent::SoundData();
+    auto ret = wavAgent::Load("data/WAV-16000Hz-1ch-f32bit-16000Hz_square.wav",
+                              &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+
     // 存在しないファイルを読み込み、エラーが返ってくることを確かめる
     ret = wavAgent::Load("not-exist-file", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_NOT_EXIST);
