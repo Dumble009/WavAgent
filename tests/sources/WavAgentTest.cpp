@@ -41,6 +41,11 @@ TEST(WavAgentLoadTest, BasicAssertions)
     ret = wavAgent::Load("data/broken_no_fmt_identifier.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
+    // 1サンプル当たりのビット数が不正な値のファイルを読み込もうとする。
+    // この場合は不正な値を持っているので、破損していると判定する
+    ret = wavAgent::Load("data/broken_invalid_bit_per_sample.wav", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN);
+
     // 波形データのサイズが間違っているファイルを読み込もうとする
     // この場合は破損しているという判定が返って来ればOK
     ret = wavAgent::Load("data/broken_tail_wrond_data_size.wav", &soundData);
