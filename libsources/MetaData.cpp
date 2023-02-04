@@ -2,6 +2,7 @@
 
 namespace wavAgent
 {
+    MetaData::MetaData() {}
     MetaData::MetaData(
         int _channelCount,
         int _samplingFreqHz,

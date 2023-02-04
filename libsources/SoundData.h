@@ -43,7 +43,7 @@ namespace wavAgent
                                   int channel);
 
         // 音声データに含まれるメタデータを保持したオブジェクトへのポインタを返す
-        WavAgentErrorCode GetMetaData(MetaData **ppMetaData);
+        WavAgentErrorCode GetMetaData(MetaData *pMetaData);
 
         // Load関数からはメンバに直接アクセスできるようにする
         friend WavAgentErrorCode Load(

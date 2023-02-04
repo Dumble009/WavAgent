@@ -182,22 +182,21 @@ void LoadAndCheckMetaData(const std::string &path,
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     // サウンドデータからメタデータを読み込み
-    wavAgent::MetaData *pMetaData = nullptr;
-    ret = soundData.GetMetaData(&pMetaData);
+    wavAgent::MetaData metaData{};
+    ret = soundData.GetMetaData(&metaData);
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
-    ASSERT_NE(pMetaData, nullptr);
 
     // メタデータから各値を読み込み
     int actualChannelCount, actualSamplingFreqHz, actualSampleCount;
     wavAgent::SampleFormatType actualSampleFormatType;
     EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
-              pMetaData->GetChannelCount(actualChannelCount));
+              metaData.GetChannelCount(actualChannelCount));
     EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
-              pMetaData->GetSamplingFreqHz(actualSamplingFreqHz));
+              metaData.GetSamplingFreqHz(actualSamplingFreqHz));
     EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
-              pMetaData->GetSampleFormat(actualSampleFormatType));
+              metaData.GetSampleFormat(actualSampleFormatType));
     EXPECT_EQ(wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS,
-              pMetaData->GetSampleCount(actualSampleCount));
+              metaData.GetSampleCount(actualSampleCount));
 
     // 比較
     EXPECT_EQ(expectedChannelCount, actualChannelCount);
@@ -254,14 +253,8 @@ TEST(LoadMetaDataTest, BasicAssertions)
     // 初期化できていないSoundDataからメタデータに読み込みをかけた時に
     // エラーコードを返ってくる事を調べる
     wavAgent::SoundData soundData{};
-
-    auto dummy = wavAgent::MetaData(0,
-                                    0,
-                                    wavAgent::SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT,
-                                    0);
-    wavAgent::MetaData *pMetaData = &dummy; // nullptrで上書きされるか調べるために、適当に有効なポインタを設定しておく
-    auto ret = soundData.GetMetaData(&pMetaData);
+    wavAgent::MetaData metaData{};
+    auto ret = soundData.GetMetaData(&metaData);
 
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
-    EXPECT_EQ(pMetaData, nullptr);
 }

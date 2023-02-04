@@ -46,7 +46,7 @@ namespace wavAgent
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
-    WavAgentErrorCode SoundData::GetMetaData(MetaData **ppMetaData)
+    WavAgentErrorCode SoundData::GetMetaData(MetaData *pMetaData)
     {
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
