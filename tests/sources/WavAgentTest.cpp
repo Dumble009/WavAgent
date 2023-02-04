@@ -33,7 +33,7 @@ TEST(WavAgentLoadTest, BasicAssertions)
 
     // RIFFチャンクのWAVEフォーマットが他の値になっているファイルを読み込もうとする
     // この場合は破損ではなく、wavファイルではないという判定を行う
-    ret = wavAgent::Load("data/invalid_WAVE_token.wav", &soundData);
+    ret = wavAgent::Load("data/broken_invalid_WAVE_token.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
     // fmt識別子が存在しないファイルを読み込もうとする。
