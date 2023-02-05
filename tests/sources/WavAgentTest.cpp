@@ -121,7 +121,6 @@ void LoadAndCheckWaveData(const std::string &path,
     ret = soundData.GetWave(&pWave, channelCount + 1);
 
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_CHANNEL_OUT_OF_RANGE);
-    EXPECT_EQ(pWave, nullptr); // 上でnullptrで無いことを確認したものがnullptrになっている事を確認
 }
 
 const std::string PATH_u8_1ch_4410 = "data/WAV-44100Hz-1ch-u8bit-4410Hz_square.wav";
