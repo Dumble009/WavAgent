@@ -7,7 +7,8 @@ namespace wavAgent
                              metaData(0,
                                       0,
                                       SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT,
-                                      0)
+                                      0),
+                             isInitialized(false)
     {
     }
 
