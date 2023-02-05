@@ -15,6 +15,12 @@ namespace wavAgent
     // サブチャンク識別子(data)。リトルエンディアンなのでdが下のバイトに来る
     constexpr int32_t DATA = 0x61746164;
 
+    // fmtチャンク内の、音声フォーマットのリニアPCMを示す値
+    constexpr int16_t FORMAT_LINEAR_PCM = 1;
+
+    // fmtチャンク内の、音声フォーマットのfloat32を示す値
+    constexpr int16_t FORMAT_FLOAT32 = 3;
+
     // ifstreamからT型のバイト分のデータを読み込んで、pRetValの先に代入する
     template <class T>
     WavAgentErrorCode getWord(
@@ -102,12 +108,88 @@ namespace wavAgent
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
-    // ifstreamからメタデータを読み込んで、pMetaDataの先にメタデータオブジェクトを代入する
+// loadMetaData関数内で、各パラメターを読み込む処理
+#define LOAD_FORMAT_DATA(data)              \
+    result = getWord(ifs, &data);           \
+    if (!IsWavAgentActionSucceeded(result)) \
+    {                                       \
+        return result;                      \
+    }
+
+    // ifstreamからメタデータを読み込んで、各ポインタが指す先に格納する
     // ifsは、fmt識別子を読み終わった直後のバイトを指している事
     WavAgentErrorCode loadMetaData(
         std::ifstream &ifs,
-        MetaData *pMetaData)
+        int *pChannelCount,
+        int *pSamplingFreqHz,
+        SampleFormatType *pSampleFormat)
     {
+        auto result = WavAgentErrorCode::WAV_AGENT_SUCCESS;
+
+        int32_t fmtChunkByteSize;
+        LOAD_FORMAT_DATA(fmtChunkByteSize)
+
+        int16_t soundFormat;
+        LOAD_FORMAT_DATA(soundFormat)
+
+        int16_t channelCount;
+        LOAD_FORMAT_DATA(channelCount)
+
+        int32_t samplingFreqHz;
+        LOAD_FORMAT_DATA(samplingFreqHz)
+
+        int32_t averageBytesPerSecond;
+        LOAD_FORMAT_DATA(averageBytesPerSecond)
+
+        int16_t blockSize;
+        LOAD_FORMAT_DATA(blockSize)
+
+        int16_t bitPerSample;
+        LOAD_FORMAT_DATA(bitPerSample)
+
+        // フォーマットチャンク全体のサイズから、読み込んだ各データのバイト数を引いた残りサイズ
+        int remainingBytes = fmtChunkByteSize - 16;
+        ifs.seekg(remainingBytes, ifs.cur); // 残りのデータは使用しないので、現在の位置からその分だけ読み込み位置をシークする
+        if (ifs.fail())
+        {
+            return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
+        }
+
+        // 1サンプル当たりのビット数をSampleFormatTypeEnumに変換する
+        SampleFormatType formatType;
+        if (soundFormat == FORMAT_FLOAT32)
+        {
+            formatType = SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT;
+        }
+        else if (soundFormat == FORMAT_LINEAR_PCM)
+        {
+            // リニアPCMの場合は1サンプル当たりのビット数でフォーマットが決まる
+            switch (bitPerSample)
+            {
+            case 8:
+                formatType = SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT;
+                break;
+            case 16:
+                formatType = SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT;
+                break;
+            case 24:
+                formatType = SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT;
+                break;
+            case 32:
+                formatType = SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT;
+                break;
+            default:
+                return WavAgentErrorCode::WAV_AGENT_NOT_SUPPORTED_FORMAT;
+            }
+        }
+        else
+        {
+            return WavAgentErrorCode::WAV_AGENT_NOT_SUPPORTED_FORMAT;
+        }
+
+        *pChannelCount = channelCount;
+        *pSamplingFreqHz = samplingFreqHz;
+        *pSampleFormat = formatType;
 
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
@@ -130,8 +212,17 @@ namespace wavAgent
             return result;
         }
 
-        // fmtチャンクを読み込んでメタデータを作成する
+        // fmtチャンクを読み込んでメタデータを読み込む
         result = findFmt(ifs);
+        if (!IsWavAgentActionSucceeded(result))
+        {
+            return result;
+        }
+
+        int channelCount;
+        int samplingFreqHz;
+        SampleFormatType sampleFormat;
+        result = loadMetaData(ifs, &channelCount, &samplingFreqHz, &sampleFormat);
         if (!IsWavAgentActionSucceeded(result))
         {
             return result;
