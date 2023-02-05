@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <cstdint>
 #include "MetaData.h"
 #include "SampleDataTypeDefinitions.h"
 #include "WavAgentErrorCode.h"
@@ -11,7 +12,7 @@ namespace wavAgent
     {
     private:
         // 波形データ。各配列が各チャンネルの波形を表す
-        std::vector<std::vector<unsigned char>> waves;
+        std::vector<std::vector<uint8_t>> waves;
 
         // サンプリング周波数などのメタ情報
         MetaData metaData;
