@@ -20,6 +20,9 @@ namespace wavAgent
         // Load関数によって初期化されたかどうか
         bool isInitialized;
 
+        template <class T, SampleFormatType FORMAT>
+        WavAgentErrorCode getWaveBody(T **ppWave, int channel);
+
     public:
         SoundData();
 
