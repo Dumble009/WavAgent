@@ -267,14 +267,14 @@ namespace wavAgent
 
         // 波形データを格納するvectorのサイズを設定
         pWave->resize(channelCount);
-        int samplesPerChannel = waveDataSize / channelCount;
+        int bytesPerChannel = waveDataSize / channelCount;
         for (int i = 0; i < channelCount; i++)
         {
-            (*pWave)[i].resize(samplesPerChannel);
+            (*pWave)[i].resize(bytesPerChannel);
         }
 
         // サンプル数の返り値に値を設定する
-        *pSampleCount = samplesPerChannel;
+        *pSampleCount = bytesPerChannel / bytesPerSample;
 
         // 波形データのロード
         // マルチチャンネルの場合は、1サンプルごとにチャンネルが切り替わる
