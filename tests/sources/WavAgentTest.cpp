@@ -152,9 +152,16 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          1,
                          38400);
 
+    // SampleSigned24bitでは、int型からの変換の際に、24bit目を無視し、32bit目を符号ビットとして認識する
+    // そのため、0x800000は、24bit目が無視され0になってしまう。
+    // なので、0の24bit目を1にする操作を行うことで最小値を作る
+    wavAgent::SampleSigned24bit maxValue24 = (wavAgent::SampleSigned24bit)0x7FFFFF;
+    wavAgent::SampleSigned24bit minValue24 = 0;
+    minValue24 = minValue24 | (1 << 23); // 符号ビットを1にする
+
     LoadAndCheckWaveData(PATH_24_1ch_1600,
-                         (wavAgent::SampleSigned24bit)0x7FFFFF,
-                         (wavAgent::SampleSigned24bit)0x800000,
+                         maxValue24,
+                         minValue24,
                          1,
                          1600);
 
