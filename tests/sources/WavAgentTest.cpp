@@ -92,7 +92,7 @@ void LoadAndCheckWaveData(const std::string &path,
 
         ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
         // pWaveには波形データを指す有効なポインタが格納される
-        ASSERT_NE(pWave, nullptr);
+        ASSERT_TRUE(pWave != nullptr);
 
         // サンプルの値を一つずつ調べていく。
         // 周期ごとに10個のサンプルが含まれ、前半5個が最大値、後半5個が最小値
