@@ -52,12 +52,12 @@ TEST(WavAgentLoadTest, BasicAssertions)
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE);
 
     // 1サンプル当たりのビット数が不正な値のファイルを読み込もうとする。
-    // この場合は不正な値を持っているので、破損していると判定する
+    // この場合は、対応していないフォーマットであると判定する
     ret = wavAgent::Load("data/broken_invalid_bit_per_sample.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_SUPPORTED_FORMAT);
 
     // 対応していないフォーマット(u-Lawやa-Law)などのファイルを読み込ませる。
-    // この場合は不正な値を持っているので、破損していると判定する
+    // この場合は、対応していないフォーマットであると判定する
     ret = wavAgent::Load("data/broken_u_law.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_NOT_SUPPORTED_FORMAT);
     ret = wavAgent::Load("data/broken_a_law.wav", &soundData);
@@ -65,7 +65,9 @@ TEST(WavAgentLoadTest, BasicAssertions)
 
     // 波形データのサイズが間違っているファイルを読み込もうとする
     // この場合は破損しているという判定が返って来ればOK
-    ret = wavAgent::Load("data/broken_tail_wrond_data_size.wav", &soundData);
+    ret = wavAgent::Load("data/broken_tail_wrond_data_size_larger.wav", &soundData);
+    EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN);
+    ret = wavAgent::Load("data/broken_tail_wrong_data_size_not_multiple.wav", &soundData);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN);
 }
 
