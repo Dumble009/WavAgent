@@ -22,6 +22,7 @@ namespace wavAgent
         int sampleCount;
 
     public:
+        MetaData();
         MetaData(
             int _channelCount,
             int _samplingFreqHz,

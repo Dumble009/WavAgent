@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <cstdint>
 #include "MetaData.h"
 #include "SampleDataTypeDefinitions.h"
 #include "WavAgentErrorCode.h"
@@ -11,10 +12,16 @@ namespace wavAgent
     {
     private:
         // 波形データ。各配列が各チャンネルの波形を表す
-        std::vector<std::vector<unsigned char>> waves;
+        std::vector<std::vector<uint8_t>> waves;
 
         // サンプリング周波数などのメタ情報
         MetaData metaData;
+
+        // Load関数によって初期化されたかどうか
+        bool isInitialized;
+
+        template <class T, SampleFormatType FORMAT>
+        WavAgentErrorCode getWaveBody(T **ppWave, int channel);
 
     public:
         SoundData();
@@ -40,6 +47,11 @@ namespace wavAgent
                                   int channel);
 
         // 音声データに含まれるメタデータを保持したオブジェクトへのポインタを返す
-        WavAgentErrorCode GetMetaData(MetaData **ppMetaData);
+        WavAgentErrorCode GetMetaData(MetaData *pMetaData);
+
+        // Load関数からはメンバに直接アクセスできるようにする
+        friend WavAgentErrorCode Load(
+            std::string_view path,
+            SoundData *pSoundData);
     };
 }
