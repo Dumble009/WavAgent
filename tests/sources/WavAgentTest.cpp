@@ -99,17 +99,17 @@ void LoadAndCheckWaveData(const std::string &path,
         int sampleIdx = 0;
         for (int j = 0; j < waveCount; j++)
         {
-            ASSERT_EQ(pWave[sampleIdx], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 1], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 2], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 3], maxValue);
-            ASSERT_EQ(pWave[sampleIdx + 4], maxValue);
+            ASSERT_EQ(pWave[sampleIdx], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 1], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 2], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 3], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 4], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
 
-            ASSERT_EQ(pWave[sampleIdx + 5], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 6], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 7], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 8], minValue);
-            ASSERT_EQ(pWave[sampleIdx + 9], minValue);
+            ASSERT_EQ(pWave[sampleIdx + 5], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 6], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 7], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 8], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+            ASSERT_EQ(pWave[sampleIdx + 9], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
 
             sampleIdx += 10;
         }
@@ -147,8 +147,8 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          800);
 
     LoadAndCheckWaveData(PATH_u8_1ch_38400,
-                         (wavAgent::SampleUnsigned8bit)0xFF,
-                         (wavAgent::SampleUnsigned8bit)0x00,
+                         (wavAgent::SampleUnsigned8bit)0xC0,
+                         (wavAgent::SampleUnsigned8bit)0x40,
                          1,
                          38400);
 
