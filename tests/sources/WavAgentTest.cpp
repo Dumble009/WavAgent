@@ -99,17 +99,17 @@ void LoadAndCheckWaveData(const std::string &path,
         int sampleIdx = 0;
         for (int j = 0; j < waveCount; j++)
         {
-            EXPECT_EQ(pWave[sampleIdx], maxValue);
-            EXPECT_EQ(pWave[sampleIdx + 1], maxValue);
-            EXPECT_EQ(pWave[sampleIdx + 2], maxValue);
-            EXPECT_EQ(pWave[sampleIdx + 3], maxValue);
-            EXPECT_EQ(pWave[sampleIdx + 4], maxValue);
+            ASSERT_EQ(pWave[sampleIdx], maxValue);
+            ASSERT_EQ(pWave[sampleIdx + 1], maxValue);
+            ASSERT_EQ(pWave[sampleIdx + 2], maxValue);
+            ASSERT_EQ(pWave[sampleIdx + 3], maxValue);
+            ASSERT_EQ(pWave[sampleIdx + 4], maxValue);
 
-            EXPECT_EQ(pWave[sampleIdx + 5], minValue);
-            EXPECT_EQ(pWave[sampleIdx + 6], minValue);
-            EXPECT_EQ(pWave[sampleIdx + 7], minValue);
-            EXPECT_EQ(pWave[sampleIdx + 8], minValue);
-            EXPECT_EQ(pWave[sampleIdx + 9], minValue);
+            ASSERT_EQ(pWave[sampleIdx + 5], minValue);
+            ASSERT_EQ(pWave[sampleIdx + 6], minValue);
+            ASSERT_EQ(pWave[sampleIdx + 7], minValue);
+            ASSERT_EQ(pWave[sampleIdx + 8], minValue);
+            ASSERT_EQ(pWave[sampleIdx + 9], minValue);
 
             sampleIdx += 10;
         }
