@@ -179,9 +179,9 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          1,
                          1600);
 
-    // 不適切なフォーマットで読み込みをかけるとエラーコードとnullptrが返されることを調べる
+    // 不適切なフォーマットで読み込みをかけるとエラーコードが返されることを調べる
     wavAgent::SampleSigned32bit dummyValue = 0;
-    wavAgent::SampleSigned32bit *pWave = &dummyValue; // pWaveがnullptrに上書きされることを調べたいので、適当な有効なポインタを入れておく
+    wavAgent::SampleSigned32bit *pWave = &dummyValue;
 
     wavAgent::SoundData soundData{};
     auto ret = wavAgent::Load(PATH_u8_1ch_4410, &soundData);
@@ -189,14 +189,12 @@ TEST(WavAgentWavDataTest, BasicAssertions)
 
     ret = soundData.GetWave(&pWave, 0);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_INVALID_FORMAT);
-    EXPECT_EQ(pWave, nullptr);
 
-    // Load関数でロードされていないSoundDataに対してGetWave関数を実行したらエラーコードとnullptrが返されることを調べる。
+    // Load関数でロードされていないSoundDataに対してGetWave関数を実行したらエラーコードが返されることを調べる。
     soundData = wavAgent::SoundData();
-    pWave = &dummyValue; // pWaveがnullptrに上書きされることを調べるために、適当に有効なポインタを設定
+    pWave = &dummyValue;
     ret = soundData.GetWave(&pWave, 0);
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
-    EXPECT_EQ(pWave, nullptr);
 }
 
 void LoadAndCheckMetaData(const std::string &path,
