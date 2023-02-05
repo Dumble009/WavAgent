@@ -66,6 +66,22 @@ namespace wavAgent
         return isIdentifierFound;
     }
 
+    // ifsの現在位置から末尾まで、残り何バイト残っているか調べて返す
+    int getRemainingBytes(std::ifstream &ifs)
+    {
+        // ファイル末尾の位置-現在位置で残りバイト数を計算する
+        int currentPosition = (int)ifs.tellg();
+
+        ifs.seekg(0, ifs.end);
+        int totalPosition = (int)ifs.tellg();
+
+        // ifs.curをキャッシュしておいて元の場所に戻ろうとすると失敗したので、
+        // ファイル先頭からの相対位置指定でシークする。
+        ifs.seekg(currentPosition, ifs.beg);
+
+        return totalPosition - currentPosition;
+    }
+
     // ifsが保持するストリームが正しいwavファイルの物かを調べる。
     WavAgentErrorCode checkWavFile(std::ifstream &ifs)
     {
@@ -194,6 +210,104 @@ namespace wavAgent
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
+    // formatTypeが示すフォーマットの1サンプルのバイト数を返す
+    int getBytesPerSampleOfFormatType(SampleFormatType formatType)
+    {
+        switch (formatType)
+        {
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT:
+            return 1;
+
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT:
+            return 2;
+
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT:
+            return 3;
+
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT:
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT:
+            return 4;
+
+        default:
+            return 0;
+        }
+    }
+
+    // 波形データを読み込む。
+    // pWaveが指す先に波形データを格納し、サンプル数をpSampleCountで返す
+    WavAgentErrorCode loadWaveData(
+        std::ifstream &ifs,
+        int channelCount,            // 波形のチャンネル数
+        SampleFormatType formatType, // サンプルのフォーマット
+        std::vector<std::vector<uint8_t>> *pWave,
+        int *pSampleCount)
+    {
+        // 波形データを格納するデータチャンクを探すために、data識別子を探す
+        if (!findIdentifier(ifs, DATA))
+        {
+            return WavAgentErrorCode::WAV_AGENT_NOT_WAV_FILE;
+        }
+
+        // 波形データのサイズ(4バイトを取得)
+        int waveDataSize;
+        auto ret = getWord(ifs, &waveDataSize);
+
+        // 1サンプルのバイト数を計算
+        int bytesPerSample = getBytesPerSampleOfFormatType(formatType);
+
+        // 波形データのサイズが適正か調べる。
+        // ファイルの残りバイト数より小さく、
+        // 1サンプルのバイト数*チャンネル数の倍数になっているはず
+        int remainingBytes = getRemainingBytes(ifs);
+        if ((waveDataSize > remainingBytes) ||
+            (waveDataSize % (channelCount * bytesPerSample) != 0))
+        {
+            return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
+        }
+
+        // 波形データを格納するvectorのサイズを設定
+        pWave->resize(channelCount);
+        int samplesPerChannel = waveDataSize / channelCount;
+        for (int i = 0; i < channelCount; i++)
+        {
+            (*pWave)[i].resize(samplesPerChannel);
+        }
+
+        // サンプル数の返り値に値を設定する
+        *pSampleCount = samplesPerChannel;
+
+        // 波形データのロード
+        // マルチチャンネルの場合は、1サンプルごとにチャンネルが切り替わる
+        int currentChannel = 0; // 今何番目のチャンネルのデータを読み込んでいるか
+        int sampleIdx = 0;      // 今currentChannelの何個目のサンプルを読み込んでいるか
+        int remainingWaveDataSize = waveDataSize;
+        while (remainingWaveDataSize > 0)
+        {
+            // getWordを使用するとuint8_t分しかデータを読まないので、普通にreadを使用する
+            ifs.read(
+                (char *)&((*pWave)[currentChannel][sampleIdx * bytesPerSample]),
+                bytesPerSample);
+
+            remainingWaveDataSize -= bytesPerSample;
+
+            if (ifs.fail())
+            {
+                return WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN;
+            }
+
+            // 読み込むチャンネルの切り替え
+            // チャンネルが1巡したら、サンプルのインデックスを切り返る
+            currentChannel++;
+            if (currentChannel == channelCount)
+            {
+                currentChannel = 0;
+                sampleIdx++;
+            }
+        }
+
+        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
+    }
+
     WavAgentErrorCode Load(
         std::string_view path,
         SoundData *pSoundData)
@@ -227,6 +341,25 @@ namespace wavAgent
         {
             return result;
         }
+
+        int sampleCount;
+        result = loadWaveData(ifs,
+                              channelCount,
+                              sampleFormat,
+                              &(pSoundData->waves),
+                              &sampleCount);
+        if (!IsWavAgentActionSucceeded(result))
+        {
+            return result;
+        }
+
+        MetaData metaData(channelCount,
+                          samplingFreqHz,
+                          sampleFormat,
+                          sampleCount);
+
+        pSoundData->metaData = metaData;
+        pSoundData->isInitialized = true;
 
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
