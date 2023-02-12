@@ -129,7 +129,19 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWaveSizeInByte(size_t *ret, int channel)
     {
-        return wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS;
+        if (!isInitialized)
+        {
+            return WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED;
+        }
+
+        if (waves.size() <= channel)
+        {
+            return WavAgentErrorCode::WAV_AGENT_CHANNEL_OUT_OF_RANGE;
+        }
+
+        *ret = waves[channel].size();
+
+        return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
     WavAgentErrorCode SoundData::GetMetaData(MetaData *pMetaData)
