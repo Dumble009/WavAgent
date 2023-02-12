@@ -156,21 +156,21 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          (wavAgent::SampleUnsigned8bit)0x00,
                          1,
                          4410,
-                         4410);
+                         44100);
 
     LoadAndCheckWaveData(PATH_16_2ch_800,
                          (wavAgent::SampleSigned16bit)0x7FFF,
                          (wavAgent::SampleSigned16bit)0x8000,
                          2,
                          800,
-                         1600);
+                         16000);
 
     LoadAndCheckWaveData(PATH_u8_1ch_38400,
                          (wavAgent::SampleUnsigned8bit)0xC0,
                          (wavAgent::SampleUnsigned8bit)0x40,
                          1,
                          38400,
-                         38400);
+                         384000);
 
     // SampleSigned24bitでは、int型からの変換の際に、24bit目を無視し、32bit目を符号ビットとして認識する
     // そのため、0x800000は、24bit目が無視され0になってしまう。
@@ -184,14 +184,14 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          minValue24,
                          1,
                          1600,
-                         4800);
+                         48000);
 
     LoadAndCheckWaveData(PATH_32_1ch_1600,
                          (wavAgent::SampleSigned32bit)0x7FFFFFFF,
                          (wavAgent::SampleSigned32bit)0x80000000,
                          1,
                          1600,
-                         6400);
+                         64000);
 
     int maxValueInt = 0x3F800000; // floatの最大値の16進数表記
     int minValueInt = 0xBF800000; // floatの最小値の16進数表記
@@ -206,7 +206,7 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          minValueFloat,
                          1,
                          1600,
-                         6400);
+                         64000);
 
     // void*での波形データの読み込み
     wavAgent::SoundData voidPtrSoundData{};
@@ -227,7 +227,7 @@ TEST(WavAgentWavDataTest, BasicAssertions)
     size_t byteCount = 0;
     ret = voidPtrSoundData.GetWaveSizeInByte(&byteCount, 0);
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
-    EXPECT_EQ(byteCount, 4410);
+    EXPECT_EQ(byteCount, 44100);
 
     // 不適切なフォーマットで読み込みをかけるとエラーコードが返されることを調べる
     wavAgent::SampleSigned32bit dummyValue = 0;
