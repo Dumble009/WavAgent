@@ -71,6 +71,32 @@ TEST(WavAgentLoadTest, BasicAssertions)
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_FILE_IS_BROKEN);
 }
 
+// 波形データの形状をチェックする
+template <class T>
+void CheckWaveForm(T *pWave, T maxValue, T minValue, int waveCount, const std::string &path)
+{
+    // サンプルの値を一つずつ調べていく。
+    // 周期ごとに10個のサンプルが含まれ、前半5個が最大値、後半5個が最小値
+    int sampleIdx = 0;
+    for (int i = 0; i < waveCount; i++)
+    {
+        ASSERT_EQ(pWave[sampleIdx], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 1], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 2], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 3], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 4], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+
+        ASSERT_EQ(pWave[sampleIdx + 5], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 6], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 7], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 8], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+        ASSERT_EQ(pWave[sampleIdx + 9], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
+
+        sampleIdx += 10;
+    }
+}
+
+// 波形データを読み込んで、その形状やパラメータをチェックする
 template <class T>
 void LoadAndCheckWaveData(const std::string &path,
                           T maxValue,
@@ -102,25 +128,8 @@ void LoadAndCheckWaveData(const std::string &path,
         ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
         ASSERT_EQ(byteSize, actualByteSize);
 
-        // サンプルの値を一つずつ調べていく。
-        // 周期ごとに10個のサンプルが含まれ、前半5個が最大値、後半5個が最小値
-        int sampleIdx = 0;
-        for (int j = 0; j < waveCount; j++)
-        {
-            ASSERT_EQ(pWave[sampleIdx], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 1], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 2], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 3], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 4], maxValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-
-            ASSERT_EQ(pWave[sampleIdx + 5], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 6], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 7], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 8], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-            ASSERT_EQ(pWave[sampleIdx + 9], minValue) << ":" << path << ": channel = " << i << " : sampleIdx = " << sampleIdx << std::endl;
-
-            sampleIdx += 10;
-        }
+        // 波形の形状の確認
+        CheckWaveForm(pWave, maxValue, minValue, waveCount, path);
     }
 
     ASSERT_NE(pWave, nullptr); // 直前に読み込んだ波形を指している事を確認
@@ -199,12 +208,31 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          1600,
                          6400);
 
+    // void*での波形データの読み込み
+    wavAgent::SoundData voidPtrSoundData{};
+    auto ret = wavAgent::Load(PATH_u8_1ch_4410, &voidPtrSoundData);
+    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+
+    // 波形の形状とバイト数の確認
+    void *voidPWave;
+    ret = voidPtrSoundData.GetWave(&voidPWave, 0);
+    CheckWaveForm((wavAgent::SampleUnsigned8bit *)voidPWave,
+                  (wavAgent::SampleUnsigned8bit)0xFF,
+                  (wavAgent::SampleUnsigned8bit)0x00,
+                  4410,
+                  PATH_u8_1ch_4410);
+
+    size_t byteCount = 0;
+    ret = voidPtrSoundData.GetWaveSizeInByte(&byteCount, 0);
+    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+    EXPECT_EQ(byteCount, 4410);
+
     // 不適切なフォーマットで読み込みをかけるとエラーコードが返されることを調べる
     wavAgent::SampleSigned32bit dummyValue = 0;
     wavAgent::SampleSigned32bit *pWave = &dummyValue;
 
     wavAgent::SoundData soundData{};
-    auto ret = wavAgent::Load(PATH_u8_1ch_4410, &soundData);
+    ret = wavAgent::Load(PATH_u8_1ch_4410, &soundData);
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     ret = soundData.GetWave(&pWave, 0);
