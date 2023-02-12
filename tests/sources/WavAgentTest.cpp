@@ -113,13 +113,18 @@ void LoadAndCheckWaveData(const std::string &path,
 
     // 各チャンネルの波形を独立に調べる
     T *pWave = nullptr;
+    // voidポインタでも正常に波形を取れるか調べる
+    void *voidPWave = nullptr;
     for (int i = 0; i < channelCount; i++)
     {
         ret = soundData.GetWave(&pWave, i);
-
         ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
         // pWaveには波形データを指す有効なポインタが格納される
         ASSERT_TRUE(pWave != nullptr);
+
+        ret = soundData.GetWave(&voidPWave, i);
+        ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+        ASSERT_TRUE(voidPWave != nullptr);
 
         // バイト数のチェック
         size_t actualByteSize = 0;
@@ -130,6 +135,7 @@ void LoadAndCheckWaveData(const std::string &path,
 
         // 波形の形状の確認
         CheckWaveForm(pWave, maxValue, minValue, waveCount, path);
+        CheckWaveForm((T *)voidPWave, maxValue, minValue, waveCount, path);
     }
 
     ASSERT_NE(pWave, nullptr); // 直前に読み込んだ波形を指している事を確認
@@ -208,33 +214,12 @@ TEST(WavAgentWavDataTest, BasicAssertions)
                          1600,
                          64000);
 
-    // void*での波形データの読み込み
-    wavAgent::SoundData voidPtrSoundData{};
-    auto ret = wavAgent::Load(PATH_u8_1ch_4410, &voidPtrSoundData);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
-
-    // 波形の形状とバイト数の確認
-    void *voidPWave = nullptr;
-    ret = voidPtrSoundData.GetWave(&voidPWave, 0);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
-    ASSERT_TRUE(voidPWave != nullptr);
-    CheckWaveForm((wavAgent::SampleUnsigned8bit *)voidPWave,
-                  (wavAgent::SampleUnsigned8bit)0xFF,
-                  (wavAgent::SampleUnsigned8bit)0x00,
-                  4410,
-                  PATH_u8_1ch_4410);
-
-    size_t byteCount = 0;
-    ret = voidPtrSoundData.GetWaveSizeInByte(&byteCount, 0);
-    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
-    EXPECT_EQ(byteCount, 44100);
-
     // 不適切なフォーマットで読み込みをかけるとエラーコードが返されることを調べる
     wavAgent::SampleSigned32bit dummyValue = 0;
     wavAgent::SampleSigned32bit *pWave = &dummyValue;
 
     wavAgent::SoundData soundData{};
-    ret = wavAgent::Load(PATH_u8_1ch_4410, &soundData);
+    auto ret = wavAgent::Load(PATH_u8_1ch_4410, &soundData);
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     ret = soundData.GetWave(&pWave, 0);
