@@ -82,6 +82,56 @@ namespace wavAgent
                            SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT>(ppWave, channel);
     }
 
+    WavAgentErrorCode SoundData::GetWave(
+        void **ppWave,
+        int channel)
+    {
+        SampleFormatType sampleFormatType;
+        auto result = metaData.GetSampleFormat(sampleFormatType);
+
+        if (!IsWavAgentActionSucceeded(result))
+        {
+            return result;
+        }
+
+        switch (sampleFormatType)
+        {
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT:
+            return getWaveBody<SampleUnsigned8bit,
+                               SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT>(
+                (SampleUnsigned8bit **)ppWave,
+                channel);
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT:
+            return getWaveBody<SampleSigned16bit,
+                               SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT>(
+                (SampleSigned16bit **)ppWave,
+                channel);
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT:
+            return getWaveBody<SampleSigned24bit,
+                               SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT>(
+                (SampleSigned24bit **)ppWave,
+                channel);
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT:
+            return getWaveBody<SampleSigned32bit,
+                               SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT>(
+                (SampleSigned32bit **)ppWave,
+                channel);
+        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT:
+            return getWaveBody<SampleSigned32bitFloat,
+                               SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT>(
+                (SampleSigned32bitFloat **)ppWave,
+                channel);
+
+        default:
+            return WavAgentErrorCode::WAV_AGENT_INVALID_FORMAT;
+        }
+    }
+
+    WavAgentErrorCode SoundData::GetWaveSizeInByte(size_t *ret, int channel)
+    {
+        return wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS;
+    }
+
     WavAgentErrorCode SoundData::GetMetaData(MetaData *pMetaData)
     {
         if (!isInitialized)
