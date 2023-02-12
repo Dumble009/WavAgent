@@ -46,7 +46,7 @@ namespace wavAgent
                                   int channel);
 
         // 特定のチャンネルのサイズをバイトで返す
-        size_t GetWaveSizeInByte(int channel);
+        WavAgentErrorCode GetWaveSizeInByte(size_t *ret, int channel);
 
         // 音声データに含まれるメタデータを保持したオブジェクトへのポインタを返す
         WavAgentErrorCode GetMetaData(MetaData *pMetaData);
