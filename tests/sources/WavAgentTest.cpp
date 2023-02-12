@@ -320,3 +320,13 @@ TEST(LoadMetaDataTest, BasicAssertions)
 
     EXPECT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SOUND_DATA_IS_NOT_INITIALIZED);
 }
+
+// SampleFormatTypeをバイト数に変換する処理が正しい値を返すか調べるテスト
+TEST(SampleFormatTypeByteSizeTest, BasicAssertions)
+{
+    EXPECT_EQ(1, wavAgent::GetByteSizeOfFormat(wavAgent::SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT));
+    EXPECT_EQ(2, wavAgent::GetByteSizeOfFormat(wavAgent::SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT));
+    EXPECT_EQ(3, wavAgent::GetByteSizeOfFormat(wavAgent::SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT));
+    EXPECT_EQ(4, wavAgent::GetByteSizeOfFormat(wavAgent::SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT));
+    EXPECT_EQ(4, wavAgent::GetByteSizeOfFormat(wavAgent::SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT));
+}

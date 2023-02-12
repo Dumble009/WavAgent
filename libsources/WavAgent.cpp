@@ -210,29 +210,6 @@ namespace wavAgent
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
-    // formatTypeが示すフォーマットの1サンプルのバイト数を返す
-    int getBytesPerSampleOfFormatType(SampleFormatType formatType)
-    {
-        switch (formatType)
-        {
-        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT:
-            return 1;
-
-        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT:
-            return 2;
-
-        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT:
-            return 3;
-
-        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT:
-        case SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT:
-            return 4;
-
-        default:
-            return 0;
-        }
-    }
-
     // 波形データを読み込む。
     // pWaveが指す先に波形データを格納し、サンプル数をpSampleCountで返す
     WavAgentErrorCode loadWaveData(
@@ -253,7 +230,7 @@ namespace wavAgent
         auto ret = getWord(ifs, &waveDataSize);
 
         // 1サンプルのバイト数を計算
-        int bytesPerSample = getBytesPerSampleOfFormatType(formatType);
+        int bytesPerSample = GetByteSizeOfFormat(formatType);
 
         // 波形データのサイズが適正か調べる。
         // ファイルの残りバイト数より小さく、

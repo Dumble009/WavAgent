@@ -11,4 +11,7 @@ namespace wavAgent
         WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT = 3,
         WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT = 4,
     };
+
+    // SampleFormatTypeが表すフォーマットのサンプルのバイト数を返す
+    int GetByteSizeOfFormat(SampleFormatType formatType);
 }
