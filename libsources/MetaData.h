@@ -30,15 +30,15 @@ namespace wavAgent
             int _sampleCount);
 
         // 波形データに含まれるチャンネル数を返す
-        WavAgentErrorCode GetChannelCount(int &ret);
+        WavAgentErrorCode GetChannelCount(int &ret) const;
 
         // サンプリング周波数。単位はHz
-        WavAgentErrorCode GetSamplingFreqHz(int &ret);
+        WavAgentErrorCode GetSamplingFreqHz(int &ret) const;
 
         // サンプルのデータ形式
-        WavAgentErrorCode GetSampleFormat(SampleFormatType &ret);
+        WavAgentErrorCode GetSampleFormat(SampleFormatType &ret) const;
 
         // 波形データの1チャンネルに含まれるサンプル数
-        WavAgentErrorCode GetSampleCount(int &ret);
+        WavAgentErrorCode GetSampleCount(int &ret) const;
     };
 }

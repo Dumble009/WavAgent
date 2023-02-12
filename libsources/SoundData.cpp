@@ -13,7 +13,7 @@ namespace wavAgent
     }
 
     template <class T, SampleFormatType FORMAT>
-    WavAgentErrorCode SoundData::getWaveBody(T **ppWave, int channel)
+    WavAgentErrorCode SoundData::getWaveBody(T **ppWave, int channel) const
     {
         if (!isInitialized)
         {
@@ -44,7 +44,7 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWave(
         SampleUnsigned8bit **ppWave,
-        int channel)
+        int channel) const
     {
         return getWaveBody<SampleUnsigned8bit,
                            SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_UNSIGNED_8_BIT>(ppWave, channel);
@@ -52,7 +52,7 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWave(
         SampleSigned16bit **ppWave,
-        int channel)
+        int channel) const
     {
         return getWaveBody<SampleSigned16bit,
                            SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_16_BIT>(ppWave, channel);
@@ -60,7 +60,7 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWave(
         SampleSigned24bit **ppWave,
-        int channel)
+        int channel) const
     {
         return getWaveBody<SampleSigned24bit,
                            SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_24_BIT>(ppWave, channel);
@@ -68,7 +68,7 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWave(
         SampleSigned32bit **ppWave,
-        int channel)
+        int channel) const
     {
         return getWaveBody<SampleSigned32bit,
                            SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT>(ppWave, channel);
@@ -76,7 +76,7 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWave(
         SampleSigned32bitFloat **ppWave,
-        int channel)
+        int channel) const
     {
         return getWaveBody<SampleSigned32bitFloat,
                            SampleFormatType::WAV_AGENT_SAMPLE_STRUCTURE_SIGNED_32_BIT_FLOAT>(ppWave, channel);
@@ -84,7 +84,7 @@ namespace wavAgent
 
     WavAgentErrorCode SoundData::GetWave(
         void **ppWave,
-        int channel)
+        int channel) const
     {
         SampleFormatType sampleFormatType;
         auto result = metaData.GetSampleFormat(sampleFormatType);
@@ -127,7 +127,7 @@ namespace wavAgent
         }
     }
 
-    WavAgentErrorCode SoundData::GetWaveSizeInByte(size_t *ret, int channel)
+    WavAgentErrorCode SoundData::GetWaveSizeInByte(size_t *ret, int channel) const
     {
         if (!isInitialized)
         {
@@ -144,7 +144,7 @@ namespace wavAgent
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
-    WavAgentErrorCode SoundData::GetMetaData(MetaData *pMetaData)
+    WavAgentErrorCode SoundData::GetMetaData(MetaData *pMetaData) const
     {
         if (!isInitialized)
         {

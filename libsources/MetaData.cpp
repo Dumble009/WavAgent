@@ -16,28 +16,28 @@ namespace wavAgent
     }
 
     // 波形データに含まれるチャンネル数を返す
-    WavAgentErrorCode MetaData::GetChannelCount(int &ret)
+    WavAgentErrorCode MetaData::GetChannelCount(int &ret) const
     {
         ret = channelCount;
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
     // サンプリング周波数。単位はHz
-    WavAgentErrorCode MetaData::GetSamplingFreqHz(int &ret)
+    WavAgentErrorCode MetaData::GetSamplingFreqHz(int &ret) const
     {
         ret = samplingFreqHz;
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
     // サンプルのデータ形式
-    WavAgentErrorCode MetaData::GetSampleFormat(SampleFormatType &ret)
+    WavAgentErrorCode MetaData::GetSampleFormat(SampleFormatType &ret) const
     {
         ret = sampleFormat;
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
     }
 
     // 波形データの1チャンネルに含まれるサンプル数
-    WavAgentErrorCode MetaData::GetSampleCount(int &ret)
+    WavAgentErrorCode MetaData::GetSampleCount(int &ret) const
     {
         ret = sampleCount;
         return WavAgentErrorCode::WAV_AGENT_SUCCESS;
