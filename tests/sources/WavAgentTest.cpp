@@ -214,8 +214,10 @@ TEST(WavAgentWavDataTest, BasicAssertions)
     ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
 
     // 波形の形状とバイト数の確認
-    void *voidPWave;
+    void *voidPWave = nullptr;
     ret = voidPtrSoundData.GetWave(&voidPWave, 0);
+    ASSERT_EQ(ret, wavAgent::WavAgentErrorCode::WAV_AGENT_SUCCESS);
+    ASSERT_TRUE(voidPWave != nullptr);
     CheckWaveForm((wavAgent::SampleUnsigned8bit *)voidPWave,
                   (wavAgent::SampleUnsigned8bit)0xFF,
                   (wavAgent::SampleUnsigned8bit)0x00,
