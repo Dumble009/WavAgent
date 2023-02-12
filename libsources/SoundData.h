@@ -30,21 +30,23 @@ namespace wavAgent
         WavAgentErrorCode GetWave(SampleUnsigned8bit **ppWave,
                                   int channel);
 
-        // 特定のチャンネルの波形のポインタを返す
         WavAgentErrorCode GetWave(SampleSigned16bit **ppWave,
                                   int channel);
 
-        // 特定のチャンネルの波形のポインタを返す
         WavAgentErrorCode GetWave(SampleSigned24bit **ppWave,
                                   int channel);
 
-        // 特定のチャンネルの波形のポインタを返す
         WavAgentErrorCode GetWave(SampleSigned32bit **ppWave,
                                   int channel);
 
-        // 特定のチャンネルの波形のポインタを返す
         WavAgentErrorCode GetWave(SampleSigned32bitFloat **ppWave,
                                   int channel);
+
+        WavAgentErrorCode GetWave(void **ppWave,
+                                  int channel);
+
+        // 特定のチャンネルのサイズをバイトで返す
+        size_t GetWaveSizeInByte(int channel);
 
         // 音声データに含まれるメタデータを保持したオブジェクトへのポインタを返す
         WavAgentErrorCode GetMetaData(MetaData *pMetaData);
